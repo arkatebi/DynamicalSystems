@@ -145,6 +145,18 @@ def getBifDiagrams(ode):
                   'lX':0.1,'lY':0.1,
                   'kX':0.10e0, 'kY':0.1e0})
     #ode.set(ics = {'X': 100, 'Y': 50})
+
+
+    freepar='nX'
+    fp=aux.fast_fixedpoint(ode)
+    print(fp.values())
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=0.01, step=0.1,
+                          silence=True, fs=[6,6], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
+ 
+    sys.exit(0)
     freepar='gX'
     fp=aux.fast_fixedpoint(ode)
     print(fp.values())
