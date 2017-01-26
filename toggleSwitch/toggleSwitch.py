@@ -201,19 +201,19 @@ def getNullClines():
     #ode.set(ics = {'X': 30, 'Y': 1})
  
     from PyDSTool.Toolbox import phaseplane as pp
-    vlim = {'X': [1, 1000], 'Y': [1, 1000]}
+    vlim = {'X': [1, 700], 'Y': [1, 700]}
     fp = aux.eliminate_redundants(pp.find_fixedpoints(ode, n=2, maxsearch=1e+4,
                                                      eps=1e-12),
                                                      4)
     stab = aux.stability(fp, ode)
-    
+     
     for i in range(len(fp)):
         print(stab[i], fp[i])
     nfp=0
     aux.nullclines(['X','Y'], DSargs, stab, fp, nfp=nfp, vlim=vlim,
                    maxpoints=[1000,1000],
-                   xticks=[0, 100, 200, 300, 400, 500, 600, 700, 800],
-                   yticks=[0, 100, 200, 300, 400, 500, 600, 700, 800],
+                   xticks=[0, 100, 200, 300, 400, 500, 600, 700],
+                   yticks=[0, 100, 200, 300, 400, 500, 600, 700],
                    step=0.01, minstep=0.001, maxstep=10, fs=[4,4], 
                    fontsize=8, silence=False)
 
