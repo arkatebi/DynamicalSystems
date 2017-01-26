@@ -12,6 +12,7 @@ def defineSystem():
 
     # Initialize the DSargs object with parameters
     DSargs.pars = aux.parameters()
+    #DSargs.pars = aux.parameter_set2()
 
     # obtain the differential equations:
     DSargs.varspecs = aux.equations() 
@@ -135,6 +136,7 @@ def t_dynamics_multi_ICs_XY(ode):
     plt.ylabel('Y')
     plt.title(ode.name + ' multi ICs XY')
     plt.show()
+    #plt.savefig('./figures/parSet-1_tdynamics.pdf')
 
 def getBifDiagrams(ode):
     ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
@@ -142,23 +144,22 @@ def getBifDiagrams(ode):
                   'nX':3, 'nY':3,
                   'lX':0.1,'lY':0.1,
                   'kX':0.10e0, 'kY':0.1e0})
-    ode.set(ics = {'X': 100, 'Y': 50})
+    #ode.set(ics = {'X': 100, 'Y': 50})
     freepar='gX'
     fp=aux.fast_fixedpoint(ode)
     print(fp.values())
-    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=4, 
-                          LocBifPoints=['Lp','B'], bif_startpoint=50, 
-                          maxstep=1e+1, minstep=0.01, step=0.1, 
-                          silence=True, fs=[4,4], ics=[fp], xlim=[0,300], 
-                          ylim=[0,800], fontsize=10)
-    sys.exit(0)
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=0.01, step=0.1,
+                          silence=True, fs=[6,6], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
     freepar='gY'
     fp=aux.fast_fixedpoint(ode)
-    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=4, 
-                          LocBifPoints=['Lp','B'], bif_startpoint=10, 
-                          maxstep=1e+4, minstep=1e-1, step=5e+2, 
-                          silence=True, fs=[6,5], ics=[fp], xlim=[0,1000], 
-                          fontsize=10)
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=1e-2, step=1e-1, 
+                          silence=True, fs=[6,6], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
  
 def getNullClines(DSargs, ode): 
     ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
@@ -179,7 +180,7 @@ def getNullClines(DSargs, ode):
         print(stab[i], fp[i])
     nfp=0
     aux.nullclines(['X','Y'], DSargs, stab, fp, nfp=nfp, vlim=vlim,
-                   maxpoints=[1000,1000],
+                   maxpoints=[800,800],
                    xticks=[0, 100, 200, 300, 400, 500, 600, 700],
                    yticks=[0, 100, 200, 300, 400, 500, 600, 700],
                    step=0.01, minstep=0.001, maxstep=10, fs=[4,4], 
@@ -197,7 +198,7 @@ if __name__ == '__main__':
 
     #t_dynamics_multi_ICs_X(ode)
     #t_dynamics_multi_ICs_Y(ode)
-    t_dynamics_multi_ICs_XY(ode)
+    #t_dynamics_multi_ICs_XY(ode)
 
     #getBifDiagrams(ode)
-    #getNullClines(DSargs, ode)
+    getNullClines(DSargs, ode)
