@@ -10,169 +10,38 @@ from scipy.ndimage import measurements
 import matplotlib.colors as cl
 import math
 
-def parameters(onecell=False):
-    dic =  {'km' : 5.0e-1
-           ,'kP' : 1.0e+2
-           #----------EMT circuit----------
-           #-- see table SI4a (L>Y) -- 
-           ,'gu200' : 2.1e+3, 'gZ': 1.1e+1, 'Z0u200': 2.2e+5, 'Z0Z': 2.5e+4  
-           # -- see table SI4b --
-           ,'nZu200': 3.0e+0, 'nZZ': 2.0e+0, 'nu200' : 6.0e+0, 'nSu200': 2.0e+0, 'nSZ': 2.0e+0  
-           ,'lZu200': 1.0e-1, 'lZZ': 7.5e+0, 'lSu200': 1.0e-1, 'lSZ'   : 1.0e+1
-           ,'ku200' : 5.0e-2, 'kZ' : 1.0e-1
-           ,'S0u200': 1.8e+5, 'S0Z': 1.8e+5
-           ,'u0200' : 1.0e+4
-           # -- see table SI4c --
-           ,'nSu34' : 1.0e+0, 'nSS': 1.0e+0, 'nu34' : 2.0e+0, 'nI' : 2.0e+0   
-           ,'lSu34' : 1.0e-1, 'lSS': 1.0e-1, 'lZu34': 2.0e-1, 'lIS': 6.5e+0
-           ,'ku34'  : 5.0e-2, 'kS' : 1.25e-1
-           ,'gu34'  : 1.35e+3,'gS' : 9.0e+1
-           ,'S0u34' : 3.0e+5, 'S0S': 2.0e+5
-           ,'Z0u34' : 6.0e+5
-           ,'u034'  : 1.0e+4
-           ,'I0S'   : 3.0e+2
-           #-------------------------------------------
-           #----------Notch Signaling circuit----------
-           ,'k'  : 1.0e-1, 'kI' : 5.0e-1                                    
-           ,'kc' : 1.0e-4, 'kt' : 1.0e-5                                   
-           ,'p'  : 2.0e+0, 'pf' : 1.0            
-           ,'gN' : 0.8e+1, 'gD' : 7.0e+1, 'gJ' : 2.0e+1     
-           ,'I0' : 1.0e+2                                   
-           ,'Nt' : 0.0e+0, 'Dt' : 0.0e+0, 'Jt' : 0.0e+0 
-           ,'Nn' : 0.0e+0, 'Dn' : 0.0e+0, 'Jn' : 0.0e+0 
-           ,'ln' : 7.0e+0, 'ld' : 0.0e+0, 'lj' : 2.0e+0   
-           ,'ldf': 3.0,    'ljf': 0.3
-           ,'It' : 0.0
+def parameters():
+    dic =  {'gX': 5.0e+1,
+            'gY': 5.0e+1, 
+            'X0': 1.0e+2,
+            'Y0': 1.0e+2,
+            'nX': 3.0,
+            'nY': 3.0,
+            'lX': 0.1,
+            'lY': 0.1,
+            'kX': 0.1e+0,
+            'kY': 0.1e+0
            }
-    # ---------see table SI1---------
-    if onecell:
-         dic.update({'l0': 1.0e+0,'l1': 6.0e-1,'l2': 3.0e-1
-		    ,'l3': 1.0e-1,'l4': 5.0e-2,'l5': 5.0e-2,'l6': 5.0e-2
-		    ,'gm0': 0.0e+0,'gm1': 4.0e-2,'gm2': 2.0e-1
-                    ,'gm3': 1.0e+0,'gm4': 1.0e+0,'gm5': 1.0e+0,'gm6': 1.0e+0
-                    ,'gu0': 0.0e+0,'gu1': 1*5.0e-3,'gu2': 2*5.0e-2,'gu3': 3*5.0e-1
-                    ,'gu4': 4*5.0e-1,'gu5': 5*5.0e-1,'gu6': 6*5.0e-1
-                    })
-      
-    else:
-         dic.update({'l' : [1.0e+0, 6.0e-1, 3.0e-1, 1.0e-1, 5.0e-2, 5.0e-2, 5.0e-2]
-                    ,'gm': [0.0e+0, 4.0e-2, 2.0e-1, 1.0e+0, 1.0e+0, 1.0e+0, 1.0e+0]
-                    ,'gu': [0.0e+0, 1*5.0e-3, 2*5.0e-2, 3*5.0e-1, 4*5.0e-1, 5*5.0e-1, 6*5.0e-1]
-                    ,'HS' : HS, 'Pl' : Pl, 'Py' : Py
-                    })
     return dic
-  
+
+# rhs of the differential equation, including dummy variable 
 def equations(onecell=False):
-    if onecell:
-          return {'W' : 'gu200*HS(Z,Z0u200,nZu200,lZu200)*HS(S,S0u200,nSu200,lSu200) - gZ*HS(Z,Z0Z,nZZ,lZZ)*HS(S,S0Z,nSZ,lSZ)*Py(W,km,6) - gJ*HS(I,I0,p,lj)*Py(W,km,5) - ku200*W'
-                 ,'Y' : 'gu34*HS(S,S0u34,nSu34,lSu34)*HS(Z,Z0u34,nu34,lZu34) - gS*HS(S,S0S,nSS,lSS)*HS(I,I0S,nI,lIS)*HS(It,I0S,nI,lIS)*Py(Y,km,2) - gN*HS(I,I0,p,ln)*Py(Y,km,2) - gD*HS(I,I0,p,ld)*Py(Y,km,3) - ku34*Y'
-                 ,'Z' : 'kP*gZ*HS(Z,Z0Z,nZZ,lZZ)*HS(S,S0Z,nSZ,lSZ)*Pl(W,km,6)                    - kZ*Z'
-                 ,'S' : 'kP*gS*HS(S,S0S,nSS,lSS)*HS(I,I0S,nI ,lIS)*HS(It,I0S,nI,lIS)*Pl(Y,km,2)  - kS*S'   
-                 ,'N' : 'kP*gN*HS(I,I0,p,ln)*Pl(Y,km,2) - N*( (kc*D + kt*Dt)*HS(I,I0,pf,ldf) + (kc*J + kt*Jt)*HS(I,I0,pf,ljf) ) - k*N'
-                 ,'D' : 'kP*gD*HS(I,I0,p,ld)*Pl(Y,km,3) - D*(  kc*N*HS(I,I0,pf,ldf) + kt*Nt ) - k*D'
-                 ,'J' : 'kP*gJ*HS(I,I0,p,lj)*Pl(W,km,5) - J*(  kc*N*HS(I,I0,pf,ljf) + kt*Nt ) - k*J'
-                 ,'I' : 'kt*N*( Dt*HS(I,I0,pf,ldf) + Jt*HS(I,I0,pf,ljf) ) - kI*I'
-                 }
-    else:
-          return {'W' : 'gu200*HS(Z,Z0u200,nZu200,lZu200)*HS(S,S0u200,nSu200,lSu200) - gZ*HS(Z,Z0Z,nZZ,lZZ)*HS(S,S0Z,nSZ,lSZ)*Py(W,6,km,u0200) - gJ*HS(I,I0,p,lj)*Py(W,5,km,u0200) - ku200*W'
-                 ,'Y' : 'gu34*HS(S,S0u34,nSu34,lSu34)*HS(Z,Z0u34,nu34,lZu34) - gS*HS(S,S0S,nSS,lSS)*HS(I,I0S,nI,lIS)*HS(It,I0S,nI,lIS)*Py(Y,2,km,u034) - gN*HS(I,I0,p,ln)*Py(Y,2,km,u034) - gD*HS(I,I0,p,ld)*Py(Y,3,km,u034) - ku34*Y'
-                 ,'Z' : 'kP*gZ*HS(Z,Z0Z,nZZ,lZZ)*HS(S,S0Z,nSZ,lSZ)*Pl(W,6,km,u0200) - kZ*Z'
-                 ,'S' : 'kP*gS*HS(S,S0S,nSS,lSS)*HS(I,I0S,nI ,lIS)*HS(It,I0S,nI,lIS)*Pl(Y,2,km,u034)  - kS*S'   
-                 ,'N' : 'kP*gN*HS(I,I0,p,ln)*Pl(Y,2,km,u034)  - N*( (kc*D + kt*(Dn + Dt))*HS(I,I0,pf,ldf) + (kc*J + kt*(Jn + Jt))*HS(I,I0,pf,ljf) ) - k*N'
-                 ,'D' : 'kP*gD*HS(I,I0,p,ld)*Pl(Y,3,km,u034)  - D*(  kc*N*HS(I,I0,pf,ldf) + kt*(Nn + Nt) ) - k*D'
-                 ,'J' : 'kP*gJ*HS(I,I0,p,lj)*Pl(W,5,km,u0200) - J*(  kc*N*HS(I,I0,pf,ljf) + kt*(Nn + Nt) ) - k*J'
-                 ,'I' : 'kt*N*( (Dn + Dt)*HS(I,I0,pf,ldf) + (Jn + Jt)*HS(I,I0,pf,ljf) ) - kI*I'
-                 }
-
-  
-# Auxilary functions
-def HS(X,X0,nX,lamb):
-    return lamb + (1.0-lamb)/(1.0 + (X/X0)**nX)
-
-def M(X,X0,i,n):
-    return ((X/X0)**i)/((1. + (X/X0))**n)
-
-def C(i,n):
-    return gamma(n+1)/(gamma(n-i+1)*gamma(i+1))
-
-def Py(X, n, k, u0, gu=[0.0e+0, 1*5.0e-3, 2*5.0e-2, 3*5.0e-1, 4*5.0e-1, 5*5.0e-1, 6*5.0e-1],
-       gm=[0.0e+0, 4.0e-2, 2.0e-1, 1.0e+0, 1.0e+0, 1.0e+0, 1.0e+0]):
-    v1 = 0
-    v2 = 0
-    for i in range(n):
-        v1 += gu[i]*C(i,n)*M(X,u0,i,n)
-        v2 += gm[i]*C(i,n)*M(X,u0,i,n)
-    return v1/(v2+k)
-
-def Pl(X, n, k, u0, l=[1.0e+0, 6.0e-1, 3.0e-1, 1.0e-1, 5.0e-2, 5.0e-2, 5.0e-2],
-       gm=[0.0e+0, 4.0e-2, 2.0e-1, 1.0e+0, 1.0e+0, 1.0e+0, 1.0e+0]):
-    v1 = 0
-    v2 = 0
-    for i in range(n):
-        v1 +=  l[i]*C(i,n)*M(X,u0,i,n)
-        v2 += gm[i]*C(i,n)*M(X,u0,i,n)
-    return v1/(v2+k)
-
-#def HS(X,X0,nX,l):
-    #return l + (1.0-l)/(1.0 + (X/X0)**nX)
-
-#def M(X,X0,i,n):
-    #return ((X/X0)**i)/((1. + (X/X0))**n)
-
-#def C(i,n):
-    #return gamma(n+1)/(gamma(n-i+1)*gamma(i+1))
-
-#def Py(X, n, k, u0, gu, gm):
-    #v1 = 0
-    #v2 = 0
-    #for i in range(n):
-        #v1 += gu[i]*C(i,n)*M(X,u0,i,n)
-        #v2 += gm[i]*C(i,n)*M(X,u0,i,n)
-    #return v1/(v2+k)
-
-#def Pl(X, n, k, u0, l, gm):
-    #return Py(X, n, k, u0, l, gm)
-
-def vlim(c=None):
-    if c=='E':
-        return {'N': [0.0e+4, 3.0e+4], 'D': [0.0e+4, 0.2e+4], 'J': [0.0e+4, 1.0e+4], 'I': [0.0e+4, 0.002e+4]
-               ,'W': [1.5e+4, 3.5e+4], 'Z': [0.0e+5, 0.1e+4], 'Y': [1.6e+4, 2.2e+4], 'S': [0.5e+5, 2.0e+5]
-               }
-    elif c=='E/M':
-        return {'N': [3.0e+4, 4.0e+4], 'D': [0.0e+4, 0.1e+4], 'J': [0.1e+3, 1.0e+3], 'I': [0.5e+3, 1.5e+3]
-               ,'W': [0.5e+4, 1.5e+4], 'Z': [1.0e+4, 1.5e+5], 'Y': [1.5e+4, 1.7e+4], 'S': [1.7e+5, 2.1e+5]
-               }
-    elif c=='M':
-        return {'N': [2.0e+4, 3.0e+4], 'D': [0.0e+4, 0.1e+4], 'J': [2.0e+3, 5.0e+3], 'I': [0.4e+3, 1.6e+3]
-               ,'W': [0.0e+4, 0.5e+4], 'Z': [4.0e+5, 8.5e+5], 'Y': [0.6e+4, 1.5e+4], 'S': [2.0e+5, 3.0e+5]
-               }
-    else:
-        return {'N': [0.0e+4, 3.0e+4], 'D': [0.0e+4, 0.2e+4], 'J': [0.0e+4, 1.0e+4], 'I': [0.0e+4, 0.2e+4]
-               ,'W': [0.0e+4, 4.0e+4], 'Z': [0.0e+5, 9.0e+5], 'Y': [0.6e+4, 2.4e+4], 'S': [5.0e+4, 3.0e+5]
-               }
-
-
-def functions():
-    return {'HS': (['X','X0','nX','lamb'], 'lamb + (1.0-lamb)/(1.0 + (X/X0)**nX)')
-           ,'M' : (['X','X0','i','n'], '((X/X0)**i)/((1. + (X/X0))**n)' )
-           ,'C' : (['i','n'],'special_gamma(n+1)/(special_gamma(n-i+1)*special_gamma(i+1))'     )
-           ,'Py': (['X','kd','n'],'sum(i, 0, 6, if([i]>n, 0, gu[i]*C([i],n)*M(X,u0200,[i],n)))/(sum(i, 0, 6, if([i]>n, 0, gm[i]*C([i],n)*M(X,u0200,[i],n))) + kd)')
-           ,'Pl': (['X','kd','n'],'sum(i, 0, 6, if([i]>n, 0,  l[i]*C([i],n)*M(X,u0200,[i],n)))/(sum(i, 0, 6, if([i]>n, 0, gm[i]*C([i],n)*M(X,u0200,[i],n))) + kd)')
+    return {'X': 'gX*HS(Y,Y0,nY,lY) - kX*X',
+            'Y': 'gY*HS(X,X0,nX,lX) - kY*Y'
            }
-    #return {'HS' : (['X','X0','nX','l'], 'l + (1.0-l)/(1.0 + (X/X0)**nX)')
-           #,'M'  : (['X','X0','i','n'], '((X/X0)**i)/((1. + (X/X0))**n)' )
-           #,'C'  : (['i','n'],'special_gamma(n+1)/(special_gamma(n-i+1)*special_gamma(i+1))'     )
-           #,'Py6': (['X','kd'],'sum(i, 0, 6, gu[i]*C([i],6)*M(X,u0200,[i],6))/(sum(i, 0, 6, gm[i]*C([i],6)*M(X,u0200,[i],6)) + kd)')
-           #,'Py5': (['X','kd'],'sum(i, 0, 5, gu[i]*C([i],5)*M(X,u0200,[i],5))/(sum(i, 0, 5, gm[i]*C([i],5)*M(X,u0200,[i],5)) + kd)')
-           #,'Py3': (['X','kd'],'sum(i, 0, 3, gu[i]*C([i],3)*M(X,u034,[i],3))/(sum(i, 0, 3, gm[i]*C([i],3)*M(X,u034,[i],3)) + kd)')
-           #,'Py2': (['X','kd'],'sum(i, 0, 2, gu[i]*C([i],2)*M(X,u034,[i],2))/(sum(i, 0, 2, gm[i]*C([i],2)*M(X,u034,[i],2)) + kd)')
-           #,'Pl6': (['X','kd'],'sum(i, 0, 6,  l[i]*C([i],6)*M(X,u0200,[i],6))/(sum(i, 0, 6, gm[i]*C([i],6)*M(X,u0200,[i],6)) + kd)')
-           #,'Pl5': (['X','kd'],'sum(i, 0, 5,  l[i]*C([i],5)*M(X,u0200,[i],5))/(sum(i, 0, 5, gm[i]*C([i],5)*M(X,u0200,[i],5)) + kd)')
-           #,'Pl3': (['X','kd'],'sum(i, 0, 3,  l[i]*C([i],3)*M(X,u034,[i],3))/(sum(i, 0, 3, gm[i]*C([i],3)*M(X,u034,[i],3)) + kd)')
-           #,'Pl2': (['X','kd'],'sum(i, 0, 2,  l[i]*C([i],2)*M(X,u034,[i],2))/(sum(i, 0, 2, gm[i]*C([i],2)*M(X,u034,[i],2)) + kd)')
-           #}
 
-#----------------------------------------------------------------------------------------#
+# Auxilary functions
+#def HS(X,X0,nX,lamb):
+#    return lamb + (1.0-lamb)/(1.0 + (X/X0)**nX)
+
+
+# auxiliary helper function(s) -- 
+# function name: ([func signature], definition)
+def functions():
+    return {'HS': (['A','A0','nA','lamb'], 'lamb + (1.0-lamb)/(1.0 + (A/A0)**nA)')
+           }
+
+#------------------------------------------------------------------------------#
 # Euler method for solving EDO equations 
 def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True, 
 	       nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 'D': ['N'], 'J': ['N']}):
