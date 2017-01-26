@@ -669,7 +669,6 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
 
     figure(figsize=(fs[0],fs[1]), dpi=200)
     DSnc = cp.deepcopy(DSargs) 
-
     for i in plotaxis:
         keys = list(DSargs.varspecs.keys())
         keys.remove(axis[i])
@@ -694,8 +693,11 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
         PyCont['nullclines'].forward()
         PyCont['nullclines'].backward()
 
+        #PyCont.display((axis[0],axis[1]), stability=True, linewidth=3, 
+        #                color=c[i], label='d'+axis[i]+'/dt'+' != 0' )
         PyCont.display((axis[0],axis[1]), stability=True, linewidth=3, 
-                        color=c[i], label='d'+axis[i]+'/dt'+' != 0' )
+                        color=c[i], label='d'+axis[i]+'/dt'+' = 0' )
+
         PyCont.plot.toggleLabels('off')
         PyCont.plot.togglePoints('off')
         del DSnc.pars[axis[i]]
@@ -713,9 +715,11 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
         xbin = 0.5*(xedges[1] - xedges[0])
         ybin = 0.5*(yedges[1] - yedges[0])
         plt.contour(xedges[1:]-xbin, yedges[1:]-ybin, H)
+
     plt.xlabel(axis[0])
     plt.ylabel(axis[1])
     plt.title('')
+
     plt.legend(loc=loc)
     if vlim != None:
         plt.xlim((vlim[axis[0]][0],vlim[axis[0]][1]))
