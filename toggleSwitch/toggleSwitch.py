@@ -147,7 +147,7 @@ def getBifDiagrams(ode):
     #ode.set(ics = {'X': 100, 'Y': 50})
 
 
-    freepar='nX'
+    freepar='gX'
     fp=aux.fast_fixedpoint(ode)
     print(fp.values())
     aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
