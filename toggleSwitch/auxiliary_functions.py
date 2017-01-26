@@ -11,16 +11,11 @@ import matplotlib.colors as cl
 import math
 
 def parameters():
-    dic =  {'gX': 5.0e+1,
-	    'gY': 5.0e+1, 
-	    'X0': 1.0e+2,
-	    'Y0': 1.0e+2,
-	    'nX': 3.0,
-	    'nY': 3.0,
-	    'lX': 0.1,
-	    'lY': 0.1,
-	    'kX': 0.1e+0,
-	    'kY': 0.1e+0
+    dic =  {'gX': 5.0e+1, 'gY': 5.0e+1, 
+	    'X0': 1.0e+2, 'Y0': 1.0e+2,
+	    'nX': 3.0, 'nY': 3.0,
+	    'lX': 0.1, 'lY': 0.1,
+	    'kX': 0.1e+0, 'kY': 0.1e+0
 	   }
     return dic
 
