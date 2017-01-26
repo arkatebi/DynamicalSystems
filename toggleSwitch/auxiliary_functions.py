@@ -50,7 +50,7 @@ def functions():
     return {'HS': (['A','A0','nA','lamb'], 'lamb + (1.0-lamb)/(1.0 + (A/A0)**nA)')
 	   }
 
-#----------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 # Euler method for solving EDO equations 
 def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True, 
 	       nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 'D': ['N'], 'J': ['N']}):
@@ -72,7 +72,7 @@ def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True,
         pts = pts_new
     return pts
 
-#----------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 # Sum the amount of proteins of the neighboring cells
 def nsignal_sum(p, pts, k, key, hexagonal=True):
     n = p['n']
@@ -88,7 +88,7 @@ def nsignal_sum(p, pts, k, key, hexagonal=True):
                          + X[0:n,2:(n+2)] + X[2:(n+2),2:(n+2)] )
     return     (1.0/4.0)*( X[0:n,1:(n+1)] + X[1:(n+1),0:n] + X[2:(n+2),1:(n+1)] + X[1:(n+1),2:(n+2)]  )
 
-#----------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 # Expand the matrix from nxn to (n+2)x(n+2) where the extra rows and columns are chosen by 
 # a periodic boundary condition
 def periodic_bcondition(f, n):
@@ -104,7 +104,7 @@ def periodic_bcondition(f, n):
     out[n+1    ,0      ] = out[1      ,n      ]
     return out
 
-#----------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 # Plot a hexagonal lattice from a matrix M
 def plot_hex(M, clim=None, cmap=None, clabel=None, fig_name=None, title=None, tr=None, c=None, 
 	     cbar=True, dpi=200):
@@ -226,11 +226,8 @@ def plot_fractionStates(eqs, p, v, r_v, key, tr, pts_i=None, vlim=None, l=['M','
     if fig_name!=None:
         plt.savefig(fig_name, format='pdf', dpi=200)
     plt.show()
-#----------------------------------------------------------------------------------------#    
 
-
-
-#-------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def eliminate_redundants(fp, eps=10):
     for i in range(len(fp)):
         for k, v in fp[i].items():
@@ -245,7 +242,7 @@ def eliminate_redundants(fp, eps=10):
             new_l.append(d)
     return new_l
  
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def stability(FPs, ODE, eps=0.1):
     out = []
     for i in range(len(FPs)):
@@ -263,7 +260,7 @@ def stability(FPs, ODE, eps=0.1):
         out += ['S'] if stable else ['I']
     return out
 
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def PyCont_args(nmodel, freepar, maxnumpoints, maxstep=1e+1, minstep=1e-1, stopAt=['B'],
                 step=1e-0, LocBifPoints=['BP','LP','B'], saveeigen=False, Type='EP-C'):
     PCargs = PyDSTool.args(name=nmodel, type=Type)    # 'EP-C' stands for Equilibrium Point Curve.
@@ -277,9 +274,9 @@ def PyCont_args(nmodel, freepar, maxnumpoints, maxstep=1e+1, minstep=1e-1, stopA
     PCargs.SaveEigen    = saveeigen                   # to tell unstable from stable branches
     return PCargs
  
-#-------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 #   Plot functions
-#-------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def hist_clustersize(dic, keys, tr, clim, norm=True, bars=False, fig_name=None, higher=True):
     plt.figure(figsize=(7,5), dpi=200)
     for k in keys:
@@ -315,7 +312,7 @@ def hist_clustersize(dic, keys, tr, clim, norm=True, bars=False, fig_name=None, 
             
  
 
-#-------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def plot_fates(dic, keys, tr, colors=['#e8656c','#e4fc36','#00ff9c'], vlim=[0.0, 1.0], ncomb=1, fontsize=16, fig_name=None):
     plt.figure(figsize=(8,7), dpi=200)
     cmap = cl.ListedColormap(colors)
@@ -333,7 +330,7 @@ def plot_fates(dic, keys, tr, colors=['#e8656c','#e4fc36','#00ff9c'], vlim=[0.0,
     if fig_name!=None:
         plt.savefig(fig_name, format='pdf', dpi=200)
 
-#-------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def plot_pcolors(dic, keys, fs=[10,7], ncol=None, nrow=None, fontsize=12, fig_name=None):
     if ncol == None:
         ncol = len(keys)
@@ -347,7 +344,7 @@ def plot_pcolors(dic, keys, fs=[10,7], ncol=None, nrow=None, fontsize=12, fig_na
         plt.colorbar()
     if fig_name!=None:
         plt.savefig(fig_name, format='pdf', dpi=200)
-#-------------------------------------------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def hist_dist(dic, key, hr, tr=None, a=None, fig_name=None, nbins=20, bar_width=1, bar=False, c='b', m='-o', leg=False):
     tr_key = tr.keys()[0]
     h = np.zeros((len(dic),nbins))
@@ -375,7 +372,7 @@ def hist_dist(dic, key, hr, tr=None, a=None, fig_name=None, nbins=20, bar_width=
     if fig_name!=None:
         plt.savefig(fig_name, format='pdf', dpi=200)
         
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def plot_continuation(ODE, freepar, keys, bif_startpoint, 
                       LocBifPoints=['LP','B'], PCargs=None, returnLP=None, 
                       ics=None, xlim=None, ylim=None, xticks=False, 
@@ -454,7 +451,7 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint,
         return P
     plt.show()
 
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def plot_phasediagram(ODE, freepar, v, r_v, bif_startpoint, keys=False, 
                       xlim=False, ylim=False, xticks=False, yticks=False, 
 		      show_continuation=False, maxstep=1e+2, minstep=1e-2, 
@@ -512,7 +509,7 @@ def plot_phasediagram(ODE, freepar, v, r_v, bif_startpoint, keys=False,
     if returnLPs:
         return x
     
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
                maxpoints=[1000,1000], step=5e+1, minstep=1e-1, maxstep=1e+3,
                fs=[6,5], fig_name=False, plotaxis=[0,1], loc=0, fontsize=18,
@@ -588,7 +585,7 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
         sys.stdout = original_stdout
     plt.show() 
 
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def param_sensitivity_bars(list_pars, ODE, DSargs, var, fig_name=False, 
                            fs=[10,5], delta=[0.0, 0.1, -0.1]):
     change = {}
@@ -617,7 +614,7 @@ def param_sensitivity_bars(list_pars, ODE, DSargs, var, fig_name=False,
         plt.savefig(fig_name, format='pdf', dpi=200) 
     plt.show()
 
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars, 
                                    bif_startpoint, d=[0.0, 0.1, -0.1], 
                                    c=['k', 'b', 'r'], ylim=False, xlim=False, 
@@ -667,7 +664,7 @@ def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars,
     if silence:
         sys.stdout = original_stdout
 
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def plot_3Dpotential(x1, x2, npoints, xlim=False, ylim=False, zlim=False, offset=5, cut=9.5, fig_name=False, 
 		     nbins=100, scale=1000.0):
     plt.rcParams.update({'font.size': 22}) 
@@ -706,7 +703,7 @@ def plot_3Dpotential(x1, x2, npoints, xlim=False, ylim=False, zlim=False, offset
         plt.savefig(fig_name+'.pdf', format='pdf', dpi=200)
     plt.show()
 
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def plot_trajectory(ODE, keys, dt=None, t=None, linewidth=2, fontsize=18):
     traj = ODE.compute('test_traj')
     pts = traj.sample()
@@ -715,7 +712,7 @@ def plot_trajectory(ODE, keys, dt=None, t=None, linewidth=2, fontsize=18):
     plt.xlabel(keys[0])
     plt.ylabel(keys[1])
     plt.show()
-#------------------------------------------------------------------------------#   
+#--------------------------------------------------------------------------#   
 def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
     plt.figure(figsize=(6,5), dpi=200)
     for j in range(len(dic)):
@@ -737,7 +734,7 @@ def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
         if fig_name!=None:
             plt.savefig(fig_name, format='pdf', dpi=200)
             
-#-----------------------------------------------------------------------------#   
+#--------------------------------------------------------------------------#   
 def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1, bar=False, 
               c='b', m='-o', leg=False):
     
@@ -772,7 +769,7 @@ def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,
         if fig_name!=None:
             plt.savefig(fig_name, format='pdf', dpi=200)
             
-#------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------#
 def fast_fixedpoint(ODE, tdomain=[0, 100000]):
     ODE.set(tdomain=tdomain)
     traj = ODE.compute('traj')
