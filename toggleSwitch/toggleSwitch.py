@@ -6,43 +6,30 @@ import numpy as np
 from matplotlib import pyplot as plt
 import sys
 
-# Simulation name
-DSargs = cmn.args(name='Gene Interaction')
+def defineSystem(): 
+    # Create an object of args class from common module 
+    DSargs = cmn.args(name='Gene Interaction')
 
-# Parameters
-DSargs.pars = { 'gX': 5.0e1,
-                'gY': 5.0e1,
-                'X0': 1.0e2,
-                'Y0': 1.0e2,
-                'nX': 3,
-                'nY': 3,
-                'lX': 0.1,
-                'lY': 0.1,
-                'kX': 0.10e0, 
-                'kY': 0.1e0}                
+    # Initialize the DSargs object with parameters
+    DSargs.pars = aux.parameters()
 
-# auxiliary helper function(s) -- function name: ([func signature], definition)
-DSargs.fnspecs={'HS': (['A','A0','nA','lamb'], 
-                  'lamb + (1.0-lamb)/(1.0 + (A/A0)**nA)')} 
+    # obtain the differential equations:
+    DSargs.varspecs = aux.equations() 
+    # obtain the auxiliary functions:
+    DSargs.fnspecs = aux.functions()
 
-# rhs of the differential equation, including dummy variable
-DSargs.varspecs={'X': 'gX*HS(Y,Y0,nY,lY) - kX*X', 
-                 'Y' : 'gY*HS(X,X0,nX,lX) - kY*Y'} 
-# initial conditions
-DSargs.ics = {'X': 10, 'Y': 10}
+   # Set initial conditions:
+    DSargs.ics = {'X': 10, 'Y': 10}
 
-DSargs.xdomain = {'X': [0, 1.0e+4], 'Y':[0, 1.0e+4]}
-DSargs.tdomain = [0,100]    # set the range of integration.
-ode = dst.Generator.Vode_ODEsystem(DSargs) # instance of the 'Generator' class
+    DSargs.xdomain = {'X': [0, 1.0e+4], 'Y':[0, 1.0e+4]}
 
-traj = ode.compute('polarization')  # integrate ODE
-pts = traj.sample(dt=0.01)          # Data for plotting
+    # Set the range of integration:
+    DSargs.tdomain = [0,100]    
+    return DSargs  
 
-def t_dynamics_X(): 
+def t_dynamics_X(pts): 
     # PyPlot commands
-    #plt.plot(pts['X'], pts['Y'])
     plt.plot(pts['t'], pts['X'])
-    #plt.plot(pts['t'], pts['Y'])
 
     plt.xlabel('t')       # Axes labels
     plt.ylabel('X')       # ...
@@ -52,10 +39,8 @@ def t_dynamics_X():
     plt.show()
     plt.figure()
 
-def t_dynamics_Y(): 
+def t_dynamics_Y(pts): 
     # PyPlot commands
-    #plt.plot(pts['X'], pts['Y'])
-    #plt.plot(pts['t'], pts['X'])
     plt.plot(pts['t'], pts['Y'])
 
     plt.xlabel('t')       # Axes labels
@@ -66,11 +51,9 @@ def t_dynamics_Y():
     plt.show()
     plt.figure()
 
-def t_dynamics_XY(): 
+def t_dynamics_XY(pts): 
     # PyPlot commands
     plt.plot(pts['X'], pts['Y'])
-    #plt.plot(pts['t'], pts['X'])
-    #plt.plot(pts['t'], pts['Y'])
 
     plt.xlabel('X')      # Axes labels
     plt.ylabel('Y')      # ...
@@ -79,7 +62,7 @@ def t_dynamics_XY():
     plt.title(ode.name)  # Figure title from model name
     plt.show()
 
-def t_dynamics_multi_ICs_X():   
+def t_dynamics_multi_ICs_X(ode):   
     plt.ylim([0,200])
     plt.hold(True) # Sequences of plot commands will not clear existing figures
     for i, x0 in enumerate(np.linspace(-20,10,30)):
@@ -93,7 +76,7 @@ def t_dynamics_multi_ICs_X():
     plt.title(ode.name + ' multi ICs')
     plt.show()
 
-def t_dynamics_multi_ICs_Y():   
+def t_dynamics_multi_ICs_Y(ode):   
     plt.ylim([0,200])
     plt.hold(True) # Sequences of plot commands will not clear existing figures
     for i, y0 in enumerate(np.linspace(-20,10,30)):
@@ -107,22 +90,7 @@ def t_dynamics_multi_ICs_Y():
     plt.title(ode.name + ' multi ICs')
     plt.show()
 
-def t_dynamics_multi_ICs_XY_old():   
-    plt.figure()
-    plt.ylim([0,900]) 
-    plt.hold(True) # Sequences of plot commands will not clear existing figures
-    for i, v0 in enumerate(np.linspace(-20,10,30)):
-        ode.set(ics = { 'X': v0, 'Y': v0 } )     # Initial condition
-        # Trajectories are called pol0, pol1, ...
-        # sample them on the fly to create Pointset tmp
-        tmp = ode.compute('pol%3i' % i).sample()
-        plt.plot(tmp['X'], tmp['Y'])
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title(ode.name + ' multi ICs XY')
-    plt.show()
-
-def t_dynamics_multi_ICs_X():
+def t_dynamics_multi_ICs_X(ode):
     plt.figure()
     plt.ylim([0,900])
     plt.hold(True) # Sequences of plot commands will not clear existing figures
@@ -137,7 +105,7 @@ def t_dynamics_multi_ICs_X():
     plt.title(ode.name + ' multi ICs X')
     plt.show()
 
-def t_dynamics_multi_ICs_Y():
+def t_dynamics_multi_ICs_Y(ode):
     plt.figure()
     plt.ylim([0,900])
     plt.hold(True) # Sequences of plot commands will not clear existing figures
@@ -152,7 +120,7 @@ def t_dynamics_multi_ICs_Y():
     plt.title(ode.name + ' multi ICs Y')
     plt.show()
 
-def t_dynamics_multi_ICs_XY():   
+def t_dynamics_multi_ICs_XY(ode):   
     plt.figure()
     plt.ylim([0,900])
     plt.hold(True) # Sequences of plot commands will not clear existing figures
@@ -168,7 +136,7 @@ def t_dynamics_multi_ICs_XY():
     plt.title(ode.name + ' multi ICs XY')
     plt.show()
 
-def getBifDiagrams():
+def getBifDiagrams(ode):
     ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
                   'X0':1.0e2, 'Y0': 1.0e2,
                   'nX':3, 'nY':3,
@@ -192,7 +160,7 @@ def getBifDiagrams():
                           silence=True, fs=[6,5], ics=[fp], xlim=[0,1000], 
                           fontsize=10)
  
-def getNullClines(): 
+def getNullClines(DSargs, ode): 
     ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
                   'X0':1.0e2, 'Y0':1.0e2,
                   'nX':3, 'nY':3,
@@ -218,13 +186,18 @@ def getNullClines():
                    fontsize=8, silence=False)
 
 if __name__ == '__main__': 
-    #t_dynamics_X()
-    #t_dynamics_Y()
-    #t_dynamics_XY()
+    DSargs = defineSystem()
+    ode = dst.Generator.Vode_ODEsystem(DSargs) # instance of 'Generator' class
+    traj = ode.compute('polarization')  # integrate ODE
+    pts = traj.sample(dt=0.01)          # Data for plotting
 
-    #t_dynamics_multi_ICs_X()
-    #t_dynamics_multi_ICs_Y()
-    #t_dynamics_multi_ICs_XY()
+    #t_dynamics_X(pts)
+    #t_dynamics_Y(pts)
+    #t_dynamics_XY(pts)
 
-    #getBifDiagrams()
-    getNullClines()
+    #t_dynamics_multi_ICs_X(ode)
+    #t_dynamics_multi_ICs_Y(ode)
+    t_dynamics_multi_ICs_XY(ode)
+
+    #getBifDiagrams(ode)
+    #getNullClines(DSargs, ode)
