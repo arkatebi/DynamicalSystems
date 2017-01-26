@@ -18,8 +18,8 @@ For questions, please email: Ataur Katebi (arkatebi@gmail.com).
 ### References 
 
 [1] Strogatz SH (2015). Nonlinear dynamics and chaos with applications to 
-    Physics, Biology, Chemistry, and Engineering, second edition, Westview 
-    Press.  
+    physics, biology, chemistry, and engineering, second edition, Westview 
+    Press.
 [2] Clewley R (2012). Hybrid models and biological model reduction with 
     PyDSTool, PLoS Computational Biology 8(8), PMID: 22912566.  
 
