@@ -12,23 +12,37 @@ import math
 
 def parameters():
     dic =  {'gX': 5.0e+1,
-            'gY': 5.0e+1, 
-            'X0': 1.0e+2,
-            'Y0': 1.0e+2,
-            'nX': 3.0,
-            'nY': 3.0,
-            'lX': 0.1,
-            'lY': 0.1,
-            'kX': 0.1e+0,
-            'kY': 0.1e+0
-           }
+	    'gY': 5.0e+1, 
+	    'X0': 1.0e+2,
+	    'Y0': 1.0e+2,
+	    'nX': 3.0,
+	    'nY': 3.0,
+	    'lX': 0.1,
+	    'lY': 0.1,
+	    'kX': 0.1e+0,
+	    'kY': 0.1e+0
+	   }
+    return dic
+
+def parameter_set2():
+    dic =  {'gX': 5.0e+1,
+	    'gY': 5.0e+1, 
+	    'X0': 1.0e+2,
+	    'Y0': 1.0e+2,
+	    'nX': 3.0,
+	    'nY': 3.0,
+	    'lX': 0.1,
+	    'lY': 0.1,
+	    'kX': 0.1e+0,
+	    'kY': 0.1e+0
+	   }
     return dic
 
 # rhs of the differential equation, including dummy variable 
 def equations(onecell=False):
     return {'X': 'gX*HS(Y,Y0,nY,lY) - kX*X',
-            'Y': 'gY*HS(X,X0,nX,lX) - kY*Y'
-           }
+	    'Y': 'gY*HS(X,X0,nX,lX) - kY*Y'
+	   }
 
 # Auxilary functions
 #def HS(X,X0,nX,lamb):
@@ -39,9 +53,9 @@ def equations(onecell=False):
 # function name: ([func signature], definition)
 def functions():
     return {'HS': (['A','A0','nA','lamb'], 'lamb + (1.0-lamb)/(1.0 + (A/A0)**nA)')
-           }
+	   }
 
-#------------------------------------------------------------------------------#
+#----------------------------------------------------------------------------------------#
 # Euler method for solving EDO equations 
 def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True, 
 	       nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 'D': ['N'], 'J': ['N']}):
@@ -366,11 +380,15 @@ def hist_dist(dic, key, hr, tr=None, a=None, fig_name=None, nbins=20, bar_width=
     if fig_name!=None:
         plt.savefig(fig_name, format='pdf', dpi=200)
         
-#-------------------------------------------------------------------------------------------------------------------#
-def plot_continuation(ODE, freepar, keys, bif_startpoint, LocBifPoints=['LP','B'], PCargs=None, returnLP=None, ics=None, 
-		      xlim=None, ylim=None, xticks=False, yticks=False, maxstep=1e+2, minstep=1e-2, step=5e+1, maxpoints=500, 
-		      off_points=True, nrow=None, ncol=None, showcurve=True, n_form_coef=False, silence=False, 
+#------------------------------------------------------------------------------#
+def plot_continuation(ODE, freepar, keys, bif_startpoint, 
+                      LocBifPoints=['LP','B'], PCargs=None, returnLP=None, 
+                      ics=None, xlim=None, ylim=None, xticks=False, 
+                      yticks=False, maxstep=1e+2, minstep=1e-2, step=5e+1, 
+                      maxpoints=500, off_points=True, nrow=None, ncol=None, 
+                      showcurve=True, n_form_coef=False, silence=False, 
 		      fs=[6,5], fontsize=18, fig_name=False):
+
     plt.rcParams.update({'font.size': fontsize}) 
     ODE.set(pars = {freepar: bif_startpoint})
 
@@ -380,17 +398,21 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint, LocBifPoints=['LP','B'
                 pass
         original_stdout = sys.stdout
         sys.stdout = NullDevice()
+
     if showcurve:
         if ncol == None:
             ncol = len(keys)
         if nrow == None:
             nrow = 1
+        #plt.figure(figsize=(fs[0]*ncol,fs[1]*nrow), dpi=200)
         plt.figure(figsize=(fs[0]*ncol,fs[1]*nrow), dpi=200)
     if ics==None:
-        ics = [eliminate_redundants(pp.find_fixedpoints(ODE, n=2, maxsearch=1e+4, eps=1e-12), 4)[0]]
+        ics = [eliminate_redundants(pp.find_fixedpoints(ODE, n=2, 
+                                    maxsearch=1e+4, eps=1e-12), 4)[0]]
     if PCargs==None:
-        PCargs = PyCont_args(ODE.name, freepar, maxpoints, saveeigen=True, LocBifPoints=LocBifPoints, 
-			     maxstep=maxstep, minstep=minstep, step=step) 
+        PCargs = PyCont_args(ODE.name, freepar, maxpoints, saveeigen=True, 
+                             LocBifPoints=LocBifPoints, maxstep=maxstep, 
+                             minstep=minstep, step=step) 
  
     for j in range(len(ics)):
         ODE.set(ics  = ics[j])
@@ -400,11 +422,12 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint, LocBifPoints=['LP','B'
         PyCont[ODE.name].backward()
         if showcurve:        
             for i in range(len(keys)):
-                PyCont.display((freepar,keys[i]), stability=True, axes=(nrow,ncol,i+1), color='k', linewidth=3)
+                PyCont.display((freepar,keys[i]), stability=True, 
+                               axes=(nrow,ncol,i+1), color='k', linewidth=3)
                 if off_points:
                     PyCont.plot.toggleLabels('off')
-                plt.xlabel(freepar, fontsize=18)
-                plt.ylabel(keys[i], fontsize=18)
+                plt.xlabel(freepar, fontsize=12)
+                plt.ylabel(keys[i], fontsize=12)
                 plt.title('')
                 if xlim != None:
                     plt.xlim([xlim[0],xlim[1]])
@@ -417,12 +440,15 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint, LocBifPoints=['LP','B'
     if n_form_coef:
         i = 1
         while PyCont[ODE.name].getSpecialPoint('LP'+str(i)):
-            print("LP"+str(i), PyCont[ODE.name].getSpecialPoint('LP'+str(i)).labels['LP']['data'])
+            tmpStr = 'LP'+str(i)
+            print(tmpStr, 
+                  PyCont[ODE.name].getSpecialPoint(tmpStr).labels['LP']['data'])
             i += 1
     if fig_name:
         plt.savefig(fig_name, format='pdf', dpi=200)
     if silence:
         sys.stdout = original_stdout
+
     if returnLP!=None:
         P = []
         for k in returnLP:
@@ -433,50 +459,12 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint, LocBifPoints=['LP','B'
         return P
     plt.show()
 
-#-------------------------------------------------------------------------------------------------------------------#
-def plot_continuation_twocells(ODE, freepar, keys, bif_startpoint, LocBifPoints=['LP','BP','B'], xlim=False, ylim=False, 
-			       maxpoints=500, fig_name=False, saveeigen=True, maxstep=1e-0, minstep=1e-2, step=5e-2, silence=False):
-    if silence:
-        class NullDevice():
-            def write(self, s):
-                pass
-        original_stdout = sys.stdout
-        sys.stdout = NullDevice()
-    fp = eliminate_redundants(pp.find_fixedpoints(ODE, n=2, maxsearch=1e+4, eps=1e-10),6)
-    p = plot_continuation(ODE, freepar, keys, bif_startpoint, ics=[fp[0]], maxstep=maxstep, minstep=minstep, 
-                          step=step, off_points=True,  LocBifPoints=LocBifPoints, returnLP='BP')
-    figure(figsize=(6*len(keys),5))
-    l = sorted(p + ODE.pdomain[freepar])
-    for i in range(len(p)):
-        plt.axvline(x=p[i],color='k')
-    
-    for i in range(len(l)-1):
-        ODE.set(pars = {freepar: (l[i] + l[i+1])/2} )
-        fp = eliminate_redundants(pp.find_fixedpoints(ODE, n=2, maxsearch=1e+4, eps=1e-10),6)
-        print(len(fp), fp)
-        PCargs = PyCont_args(ODE.name, freepar, maxpoints, stopAt=['B','BP'], maxstep=maxstep, minstep=minstep, step=minstep)
-        for j in range(len(fp)):
-            ODE.set(ics  = fp[j])
-            PyCont = PyDSTool.ContClass(ODE)     
-            PyCont.newCurve(PCargs)
-            PyCont[ODE.name].forward()
-            PyCont[ODE.name].backward()
-            for k in range(len(keys)):
-                PyCont.display((freepar,keys[k]), axes=(1,len(keys),k+1), stability=True, linewidth=2)
-                PyCont.plot.toggleLabels('off')
-                plt.title('')
-                plt.xlim(xlim)
-                if ylim:
-                    plt.ylim(ylim)
-    if fig_name:
-        plt.savefig(fig_name, format='pdf', dpi=200)
-    if silence:
-        sys.stdout = original_stdout
-  
-#-------------------------------------------------------------------------------------------------------------------#
-def plot_phasediagram(ODE, freepar, v, r_v, bif_startpoint, keys=False, xlim=False, ylim=False, xticks=False, yticks=False, 
-		      show_continuation=False, maxstep=1e+2, minstep=1e-2, step=5e+1, maxpoints=500, nrow=None, ncol=None,
-		      LocBifPoints=['LP','B'], BifPoints=['LP'], silence=False, fig_name=False, fast_fp=False, returnLPs=False):
+#------------------------------------------------------------------------------#
+def plot_phasediagram(ODE, freepar, v, r_v, bif_startpoint, keys=False, 
+                      xlim=False, ylim=False, xticks=False, yticks=False, 
+		      show_continuation=False, maxstep=1e+2, minstep=1e-2, 
+                      step=5e+1, maxpoints=500, nrow=None, ncol=None,
+		      LocBifPoints=['LP','B'], BifPoints=['LP'], silence=False,                       fig_name=False, fast_fp=False, returnLPs=False):
     if silence:
         class NullDevice():
             def write(self, s):
@@ -492,10 +480,16 @@ def plot_phasediagram(ODE, freepar, v, r_v, bif_startpoint, keys=False, xlim=Fal
         if fast_fp:
             fp = fast_fixedpoint(ODE)
         else:
-            fp = eliminate_redundants(pp.find_fixedpoints(ODE, n=2, maxsearch=1e+4, eps=1e-12),4)[0]
+            fp = eliminate_redundants(pp.find_fixedpoints(ODE, n=2, 
+                                      maxsearch=1e+4, eps=1e-12),
+                                      4)[0]
         ODE.set(ics  = fp)        
-        PCargs = PyCont_args(ODE.name, freepar, maxpoints, saveeigen=True, maxstep=maxstep, minstep=minstep, step=step, LocBifPoints=LocBifPoints) 
-        lp = plot_continuation(ODE, freepar, keys, bif_startpoint, PCargs=PCargs, returnLP=BifPoints, showcurve=show_continuation, ics=[fp],
+        PCargs = PyCont_args(ODE.name, freepar, maxpoints, saveeigen=True, 
+                             maxstep=maxstep, minstep=minstep, step=step, 
+                             LocBifPoints=LocBifPoints) 
+        lp = plot_continuation(ODE, freepar, keys, bif_startpoint, 
+                               PCargs=PCargs, returnLP=BifPoints, 
+                               showcurve=show_continuation, ics=[fp],
 			       fs=[4,3], fontsize=12,nrow=nrow, ncol=ncol)
         x += [lp]
         plt.show()
@@ -538,6 +532,7 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
 
     figure(figsize=(fs[0],fs[1]), dpi=200)
     DSnc = cp.deepcopy(DSargs) 
+
     for i in plotaxis:
         keys = list(DSargs.varspecs.keys())
         keys.remove(axis[i])
@@ -562,11 +557,8 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
         PyCont['nullclines'].forward()
         PyCont['nullclines'].backward()
 
-        #PyCont.display((axis[0],axis[1]), stability=True, linewidth=3, 
-        #                color=c[i], label='d'+axis[i]+'/dt'+' != 0' )
         PyCont.display((axis[0],axis[1]), stability=True, linewidth=3, 
                         color=c[i], label='d'+axis[i]+'/dt'+' = 0' )
-
         PyCont.plot.toggleLabels('off')
         PyCont.plot.togglePoints('off')
         del DSnc.pars[axis[i]]
@@ -584,11 +576,9 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
         xbin = 0.5*(xedges[1] - xedges[0])
         ybin = 0.5*(yedges[1] - yedges[0])
         plt.contour(xedges[1:]-xbin, yedges[1:]-ybin, H)
-
     plt.xlabel(axis[0])
     plt.ylabel(axis[1])
     plt.title('')
-
     plt.legend(loc=loc)
     if vlim != None:
         plt.xlim((vlim[axis[0]][0],vlim[axis[0]][1]))
@@ -604,14 +594,17 @@ def nullclines(axis, DSargs, stab, fp, nfp=0, vlim=None, c = ['b','g'],
     plt.show() 
 
 #------------------------------------------------------------------------------#
-def param_sensitivity_bars(list_pars, ODE, DSargs, var, fig_name=False, fs=[10,5], delta=[0.0, 0.1, -0.1]):
+def param_sensitivity_bars(list_pars, ODE, DSargs, var, fig_name=False, 
+                           fs=[10,5], delta=[0.0, 0.1, -0.1]):
     change = {}
     for pars in list_pars:
         if DSargs.pars[pars] != 0:
             a = []
             for d in delta:
                 ODE.set(pars = {pars: (1.0 + d)*DSargs.pars[pars]} ) 
-                a += [eliminate_redundants(pp.find_fixedpoints(ODE, n=2, maxsearch=1e+4, eps=1e-12),6)[0][var]]
+                a += [eliminate_redundants(pp.find_fixedpoints(ODE, n=2, 
+                                           maxsearch=1e+4, eps=1e-12),
+                                           6)[0][var]]
             change[pars] = [100*(a[2] - a[0])/a[0],100*(a[1] - a[0])/a[0]] 
         else:
             change[pars] = [0,0] 
@@ -629,10 +622,13 @@ def param_sensitivity_bars(list_pars, ODE, DSargs, var, fig_name=False, fs=[10,5
         plt.savefig(fig_name, format='pdf', dpi=200) 
     plt.show()
 
-#-------------------------------------------------------------------------------------------------------------------#
-def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars, bif_startpoint, d=[0.0, 0.1, -0.1], c=['k', 'b', 'r'], 
-                                   ylim=False, xlim=False, xticks=False, yticks=False, fig_name=False, ncol=False, 
-                                   nrow=False, maxstep=1e+2, minstep=1e-2, step=5e+1, silence=False):
+#------------------------------------------------------------------------------#
+def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars, 
+                                   bif_startpoint, d=[0.0, 0.1, -0.1], 
+                                   c=['k', 'b', 'r'], ylim=False, xlim=False, 
+                                   xticks=False, yticks=False, fig_name=False, 
+                                   ncol=False, nrow=False, maxstep=1e+2, 
+                                   minstep=1e-2, step=5e+1, silence=False):
     if silence:
         class NullDevice():
             def write(self, s):
@@ -676,7 +672,7 @@ def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars, bif_startpoi
     if silence:
         sys.stdout = original_stdout
 
-#-------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def plot_3Dpotential(x1, x2, npoints, xlim=False, ylim=False, zlim=False, offset=5, cut=9.5, fig_name=False, 
 		     nbins=100, scale=1000.0):
     plt.rcParams.update({'font.size': 22}) 
@@ -715,7 +711,7 @@ def plot_3Dpotential(x1, x2, npoints, xlim=False, ylim=False, zlim=False, offset
         plt.savefig(fig_name+'.pdf', format='pdf', dpi=200)
     plt.show()
 
-#----------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def plot_trajectory(ODE, keys, dt=None, t=None, linewidth=2, fontsize=18):
     traj = ODE.compute('test_traj')
     pts = traj.sample()
@@ -724,7 +720,7 @@ def plot_trajectory(ODE, keys, dt=None, t=None, linewidth=2, fontsize=18):
     plt.xlabel(keys[0])
     plt.ylabel(keys[1])
     plt.show()
-#----------------------------------------------------------------------------------------#   
+#------------------------------------------------------------------------------#   
 def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
     plt.figure(figsize=(6,5), dpi=200)
     for j in range(len(dic)):
@@ -746,7 +742,7 @@ def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
         if fig_name!=None:
             plt.savefig(fig_name, format='pdf', dpi=200)
             
-#----------------------------------------------------------------------------------------#   
+#-----------------------------------------------------------------------------#   
 def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1, bar=False, 
               c='b', m='-o', leg=False):
     
@@ -769,9 +765,11 @@ def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,
     print(hm, a)
     if np.sum(hm)>0.0:
         if bar:
-            plt.bar(np.arange(hr[key][0],hr[key][1], bar_width), hm/np.sum(hm), bar_width, color=c)
+            plt.bar(np.arange(hr[key][0],hr[key][1], bar_width), 
+                              hm/np.sum(hm), bar_width, color=c)
         else:
-            plt.plot(np.arange(hr[key][0],hr[key][1], bar_width), hm/np.sum(hm), m, color=c, ms=12, mew=2)
+            plt.plot(np.arange(hr[key][0],hr[key][1], bar_width), 
+                     hm/np.sum(hm),m, color=c, ms=12, mew=2)
         plt.xlim(hr[key])
         plt.xlabel('amount of protein')
         plt.ylabel('fraction of cells')
@@ -779,7 +777,7 @@ def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,
         if fig_name!=None:
             plt.savefig(fig_name, format='pdf', dpi=200)
             
-#-------------------------------------------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def fast_fixedpoint(ODE, tdomain=[0, 100000]):
     ODE.set(tdomain=tdomain)
     traj = ODE.compute('traj')
