@@ -13,47 +13,41 @@ import math
 def parameters():
     dic =  {'gX': 5.0e+1, 'gY': 5.0e+1, 
 	    'X0': 1.0e+2, 'Y0': 1.0e+2,
-	    'nX': 3.0, 'nY': 3.0,
-	    'lX': 0.1, 'lY': 0.1,
-	    'kX': 0.1e+0, 'kY': 0.1e+0
+	    'nX': 3.0e0, 'nY': 3.0e0,
+	    #'lX': 0.1, 'lY': 0.1,
+	    'lX': 1.0e-1, 'lY': 1.0e-1,
+	    'kX': 0.1e0, 'kY': 0.1e0
 	   }
     return dic
 
-def parameter_set2():
-    dic =  {'gX': 5.0e+1,
-	    'gY': 5.0e+1, 
-	    'X0': 1.0e+2,
-	    'Y0': 1.0e+2,
-	    'nX': 3.0,
-	    'nY': 3.0,
-	    'lX': 0.1,
-	    'lY': 0.1,
-	    'kX': 0.1e+0,
-	    'kY': 0.1e+0
-	   }
-    return dic
-
-# rhs of the differential equation, including dummy variable 
+#------------------------------------------------------------------------------#
 def equations(onecell=False):
+    # rhs of the differential equation, including dummy variable 
     return {'X': 'gX*HS(Y,Y0,nY,lY) - kX*X',
 	    'Y': 'gY*HS(X,X0,nX,lX) - kY*Y'
 	   }
 
+#------------------------------------------------------------------------------#
 # Auxilary functions
 #def HS(X,X0,nX,lamb):
 #    return lamb + (1.0-lamb)/(1.0 + (X/X0)**nX)
 
-
-# auxiliary helper function(s) -- 
-# function name: ([func signature], definition)
+#------------------------------------------------------------------------------#
 def functions():
-    return {'HS': (['A','A0','nA','lamb'], 'lamb + (1.0-lamb)/(1.0 + (A/A0)**nA)')
-	   }
+    ''' 
+    auxiliary helper function(s) -- 
+    function name: ([func signature], definition)
+    '''
+    funcDic={'HS': (['A','A0','nA','lamb'], 
+                    'lamb + (1.0-lamb)/(1.0 + (A/A0)**nA)')
+            }
+    return funcDic
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Euler method for solving EDO equations 
 def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True, 
-	       nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 'D': ['N'], 'J': ['N']}):
+	       nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 
+                             'D': ['N'], 'J': ['N']}):
     if pts==None:
         if vlim==None:
             print('ERROR: Give me a starting point (pts) or the limits for a random start point (vlim)')
@@ -61,7 +55,6 @@ def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True,
         pts = {}   
         for j in eqs.keys():
             pts[j] = np.random.uniform(vlim[j][0],vlim[j][1],(p['n'],p['n'])) 
-
     pts_new = {}
     for t in range(int(p['t']/p['dt'])):
         for key in eqs.keys():
@@ -72,7 +65,7 @@ def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True,
         pts = pts_new
     return pts
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 # Sum the amount of proteins of the neighboring cells
 def nsignal_sum(p, pts, k, key, hexagonal=True):
     n = p['n']
@@ -84,14 +77,18 @@ def nsignal_sum(p, pts, k, key, hexagonal=True):
         fng = eval(fng_dic[key],p,pts)
     X = periodic_bcondition(pts[k]*fng, n)
     if hexagonal:
-        return (1.0/6.0)*( X[0:n,1:(n+1)] + X[1:(n+1),0:n] + X[2:(n+2),1:(n+1)] + X[1:(n+1),2:(n+2)] 
-                         + X[0:n,2:(n+2)] + X[2:(n+2),2:(n+2)] )
-    return     (1.0/4.0)*( X[0:n,1:(n+1)] + X[1:(n+1),0:n] + X[2:(n+2),1:(n+1)] + X[1:(n+1),2:(n+2)]  )
+        return (1.0/6.0)*(X[0:n,1:(n+1)] + X[1:(n+1),0:n] + 
+                          X[2:(n+2),1:(n+1)] + X[1:(n+1),2:(n+2)] + 
+                          X[0:n,2:(n+2)] + X[2:(n+2),2:(n+2)])
+    return (1.0/4.0)*(X[0:n,1:(n+1)] + X[1:(n+1),0:n] + 
+                      X[2:(n+2),1:(n+1)] + X[1:(n+1),2:(n+2)])
 
-#--------------------------------------------------------------------------#
-# Expand the matrix from nxn to (n+2)x(n+2) where the extra rows and columns are chosen by 
-# a periodic boundary condition
+#------------------------------------------------------------------------------#
 def periodic_bcondition(f, n):
+    ''' 
+    Expand the matrix from nxn to (n+2)x(n+2) where the extra rows and 
+    columns are chosen by a periodic boundary condition
+    ''' 
     out = np.zeros((n+2,n+2))
     out[1:(n+1),1:(n+1)] = f
     out[0      ,1:(n+1)] = out[n      ,1:(n+1)]
@@ -104,10 +101,12 @@ def periodic_bcondition(f, n):
     out[n+1    ,0      ] = out[1      ,n      ]
     return out
 
-#--------------------------------------------------------------------------#
-# Plot a hexagonal lattice from a matrix M
-def plot_hex(M, clim=None, cmap=None, clabel=None, fig_name=None, title=None, tr=None, c=None, 
-	     cbar=True, dpi=200):
+#------------------------------------------------------------------------------#
+def plot_hex(M, clim=None, cmap=None, clabel=None, fig_name=None, 
+             title=None, tr=None, c=None, cbar=True, dpi=200):
+    '''
+    Plot a hexagonal lattice from a matrix M
+    '''
     m = cp.copy(M)
     plt.rcParams.update({'font.size': 18}) 
     n = np.shape(m)[0]
@@ -126,7 +125,8 @@ def plot_hex(M, clim=None, cmap=None, clabel=None, fig_name=None, title=None, tr
         cmap = plt.cm.Spectral_r
         
     if tr==None:
-        im = ax.scatter(x, y, c=m, s=700000/(n*n), cmap=cmap, linewidths=1, marker=(6, 0, 0))
+        im = ax.scatter(x, y, c=m, s=700000/(n*n), cmap=cmap, linewidths=1, 
+                        marker=(6, 0, 0))
     else:
         t = {}
         for i in np.arange(0,len(tr),1):
@@ -134,7 +134,8 @@ def plot_hex(M, clim=None, cmap=None, clabel=None, fig_name=None, title=None, tr
         m[m>np.max(tr)] = c[len(tr)]
         for i in np.arange(len(tr),0,-1):
             m[t[i-1]] = c[i-1]
-        im = ax.scatter(x, y, c=m, s=700000/(n*n), cmap=cmap,linewidths=1, marker=(6, 0, 0))
+        im = ax.scatter(x, y, c=m, s=700000/(n*n), cmap=cmap,
+                        linewidths=1, marker=(6, 0, 0))
         
     plt.xlim([1.0,n])
     plt.ylim([1.0,n])
@@ -152,8 +153,10 @@ def plot_hex(M, clim=None, cmap=None, clabel=None, fig_name=None, title=None, tr
     plt.show()
 
 
-def plot_relativeLevel(eqs, p, v, r_v, key, pts_i=None, vlim=None, nsignal_dict=None, fig_name=None, clim=None,
-                      show_snapshot=False, c=['b','r','g','m','k']):
+#------------------------------------------------------------------------------#
+def plot_relativeLevel(eqs, p, v, r_v, key, pts_i=None, vlim=None, 
+                       nsignal_dict=None, fig_name=None, clim=None,
+                       show_snapshot=False, c=['b','r','g','m','k']):
     fs = {}
     for k in key:
         fs[k] = np.zeros(len(r_v))
@@ -168,7 +171,8 @@ def plot_relativeLevel(eqs, p, v, r_v, key, pts_i=None, vlim=None, nsignal_dict=
                 p[v] = r_v[i] - r_v[i-1] 
         else:
             p[v] = r_v[i]
-        pts = euler_traj(eqs, p, pts=pts_i, vlim=vlim, nsignal_dict=nsignal_dict)
+        pts = euler_traj(eqs, p, pts=pts_i, vlim=vlim, 
+                         nsignal_dict=nsignal_dict)
         if v=='t':
             pts_i = pts
         if show_snapshot:
@@ -178,7 +182,8 @@ def plot_relativeLevel(eqs, p, v, r_v, key, pts_i=None, vlim=None, nsignal_dict=
     
     plt.figure(figsize=(9,6))
     for k in range(len(key)):
-        plt.plot(r_v, np.log2(fs[key[k]]/fs[key[k]][0]), 'go-', lw=2, ms=16, label=key[k], color=c[k])
+        plt.plot(r_v, np.log2(fs[key[k]]/fs[key[k]][0]), 
+                 'go-', lw=2, ms=16, label=key[k], color=c[k])
     plt.xlabel(v)
     plt.ylabel('Relative level of proteins')    
     plt.legend()
@@ -187,12 +192,14 @@ def plot_relativeLevel(eqs, p, v, r_v, key, pts_i=None, vlim=None, nsignal_dict=
     plt.show()
 
 
+#------------------------------------------------------------------------------#
 def fractionStates(X, tr):
     N = np.float(np.size(X))
     if len(tr)==1:
         return np.sum(X<tr[0])/N, np.sum(X>tr[0])/N 
     elif len(tr)==2:
-        return [np.sum(X<tr[0])/N, np.sum((X>tr[0]) & (X<tr[1]))/N, np.sum(X>tr[1])/N]
+        return [np.sum(X<tr[0])/N, np.sum((X>tr[0]) & (X<tr[1]))/N, 
+                np.sum(X>tr[1])/N]
     
 def plot_fractionStates(eqs, p, v, r_v, key, tr, pts_i=None, vlim=None, l=['M','E/M','E'], c=['#e8656c','#e4fc36','#00ff9c'], 
 			show_snapshot=False, nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 'D': ['N'], 'J': ['N']}, fig_name=None):
@@ -344,8 +351,10 @@ def plot_pcolors(dic, keys, fs=[10,7], ncol=None, nrow=None, fontsize=12, fig_na
         plt.colorbar()
     if fig_name!=None:
         plt.savefig(fig_name, format='pdf', dpi=200)
-#--------------------------------------------------------------------------#
-def hist_dist(dic, key, hr, tr=None, a=None, fig_name=None, nbins=20, bar_width=1, bar=False, c='b', m='-o', leg=False):
+
+#------------------------------------------------------------------------------#
+def hist_dist(dic, key, hr, tr=None, a=None, fig_name=None, nbins=20, 
+              bar_width=1, bar=False, c='b', m='-o', leg=False):
     tr_key = tr.keys()[0]
     h = np.zeros((len(dic),nbins))
     bar_width = (hr[key][1] - hr[key][0])/float(nbins)
@@ -354,17 +363,22 @@ def hist_dist(dic, key, hr, tr=None, a=None, fig_name=None, nbins=20, bar_width=
         if a==None or tr==None:
             h[j,:] = np.histogram(x, range=hr[key], bins=nbins)[0]
         elif a==-1:
-            h[j,:] = np.histogram(x[x<tr[tr_key][0]], range=hr[key], bins=nbins)[0]
+            h[j,:] = np.histogram(x[x<tr[tr_key][0]], range=hr[key], 
+                                  bins=nbins)[0]
         elif a==0:
-            h[j,:] = np.histogram(x[(x>tr[tr_key][0]) & (x<tr[tr_key][1])], range=hr[key], bins=nbins)[0]
+            h[j,:] = np.histogram(x[(x>tr[tr_key][0]) & (x<tr[tr_key][1])], 
+                                  range=hr[key], bins=nbins)[0]
         elif a==+1:
-            h[j,:] = np.histogram(x[x>tr[tr_key][1]], range=hr[key], bins=nbins)[0]
+            h[j,:] = np.histogram(x[x>tr[tr_key][1]], range=hr[key], 
+                                  bins=nbins)[0]
 	    
     hm = np.mean(h,axis=0)
     if bar:
-        plt.bar(np.arange(hr[key][0],hr[key][1], bar_width), hm/np.sum(hm), bar_width)
+        plt.bar(np.arange(hr[key][0],hr[key][1], bar_width), hm/np.sum(hm), 
+                          bar_width)
     else:
-        plt.plot(np.arange(hr[key][0],hr[key][1], bar_width), hm/np.sum(hm), m, color=c, ms=8, mew=2)
+        plt.plot(np.arange(hr[key][0],hr[key][1], bar_width), 
+                 hm/np.sum(hm), m, color=c, ms=8, mew=2)
     plt.xlim(hr[key])
     plt.xlabel('amount of protein')
     plt.ylabel('fraction of cells')
@@ -381,7 +395,7 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint,
                       showcurve=True, n_form_coef=False, silence=False, 
 		      fs=[6,5], fontsize=18, fig_name=False):
 
-    plt.rcParams.update({'font.size': fontsize}) 
+    plt.rcParams.update({'font.size': fontsize})
     ODE.set(pars = {freepar: bif_startpoint})
 
     if silence:
@@ -396,7 +410,6 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint,
             ncol = len(keys)
         if nrow == None:
             nrow = 1
-        #plt.figure(figsize=(fs[0]*ncol,fs[1]*nrow), dpi=200)
         plt.figure(figsize=(fs[0]*ncol,fs[1]*nrow), dpi=200)
     if ics==None:
         ics = [eliminate_redundants(pp.find_fixedpoints(ODE, n=2, 
@@ -635,17 +648,20 @@ def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars,
     for i in range(len(list_pars)):
         ODE = Vode_ODEsystem(DSargs)
         for j in range(len(d)):
-            ODE.set(pars = {list_pars[i]: (1.0 + d[j])*DSargs.pars[list_pars[i]]} ) 
-            fp_coord = eliminate_redundants(pp.find_fixedpoints(ODE, n=2, maxsearch=1e+4, eps=1e-10),6)
+            ODE.set(pars={list_pars[i]:(1.0 + d[j])*DSargs.pars[list_pars[i]]}) 
+            fp_coord = eliminate_redundants(pp.find_fixedpoints(ODE, n=2, 
+                                                                maxsearch=1e+4,                                                                 eps=1e-10),
+                                                                6)
             ODE.set(ics  = fp_coord[0])  
-            PCargs = PyCont_args('psensit', freepar, 200, saveeigen=True, maxstep=maxstep, minstep=minstep, step=step,
-				 LocBifPoints=['B','LP'])
+            PCargs = PyCont_args('psensit', freepar, 200, saveeigen=True, 
+                                  maxstep=maxstep, minstep=minstep, step=step,
+				  LocBifPoints=['B','LP'])
             PyCont = PyDSTool.ContClass(ODE)     
             PyCont.newCurve(PCargs)
             PyCont['psensit'].forward()
             PyCont['psensit'].backward()
             
-            PyCont.display((freepar,key), stability=True, axes=(nrow,ncol,i+1), color=c[j], linewidth=3)
+            PyCont.display((freepar,key), stability=True, axes=(nrow,ncol,i+1),                             color=c[j], linewidth=3)
             plot(0, 0, linewidth=3, color=c[j])
             PyCont.plot.toggleLabels('off')
         plt.title(list_pars[i])
@@ -664,9 +680,10 @@ def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars,
     if silence:
         sys.stdout = original_stdout
 
-#--------------------------------------------------------------------------#
-def plot_3Dpotential(x1, x2, npoints, xlim=False, ylim=False, zlim=False, offset=5, cut=9.5, fig_name=False, 
-		     nbins=100, scale=1000.0):
+#------------------------------------------------------------------------------#
+def plot_3Dpotential(x1, x2, npoints, xlim=False, ylim=False, zlim=False, 
+                     offset=5, cut=9.5, fig_name=False, nbins=100, 
+                     scale=1000.0):
     plt.rcParams.update({'font.size': 22}) 
     j = np.isfinite(x1) & np.isfinite(x2)
 
@@ -686,7 +703,8 @@ def plot_3Dpotential(x1, x2, npoints, xlim=False, ylim=False, zlim=False, offset
     fig = plt.figure(figsize=(10,8))
     ax = fig.add_subplot(1, 1, 1, projection='3d')
     cset = ax.contour(X, Y, Z, zdir='z', offset=offset, cmap=cm.coolwarm)
-    pc = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, alpha=0.4, cmap=cm.coolwarm, linewidth=0.1)
+    pc = ax.plot_surface(X, Y, Z, rstride=1, cstride=1, alpha=0.4, 
+                         cmap=cm.coolwarm, linewidth=0.1)
     pc.set_clim(np.min(V[V>0]),np.max(V[V>0]))
 
     ax.view_init(45,-135)
@@ -712,6 +730,7 @@ def plot_trajectory(ODE, keys, dt=None, t=None, linewidth=2, fontsize=18):
     plt.xlabel(keys[0])
     plt.ylabel(keys[1])
     plt.show()
+
 #--------------------------------------------------------------------------#   
 def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
     plt.figure(figsize=(6,5), dpi=200)
@@ -722,9 +741,11 @@ def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
         else:
             x = np.array(dic[j][keys[0]])
         y = np.array(dic[j][keys[1]])
-        plt.plot(x[w<tr['W'][0]]                   , y[w<tr['W'][0]]                   , 'o', c='#e8656c')
-        plt.plot(x[(w>tr['W'][0]) & (w<tr['W'][1])], y[(w>tr['W'][0]) & (w<tr['W'][1])], 'o', c='#e4fc36')
-        plt.plot(x[w>tr['W'][1]]                   , y[w>tr['W'][1]]                   , 'o', c='#00ff9c')
+        plt.plot(x[w<tr['W'][0]], y[w<tr['W'][0]], 'o', c='#e8656c')
+        plt.plot(x[(w>tr['W'][0]) & (w<tr['W'][1])],
+                 y[(w>tr['W'][0]) & (w<tr['W'][1])],
+                 'o', c='#e4fc36')
+        plt.plot(x[w>tr['W'][1]], y[w>tr['W'][1]], 'o', c='#00ff9c')
         plt.xlabel(keys[0])
         plt.ylabel(keys[1])
         #if lim != None:
@@ -735,8 +756,7 @@ def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
             plt.savefig(fig_name, format='pdf', dpi=200)
             
 #--------------------------------------------------------------------------#   
-def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1, bar=False, 
-              c='b', m='-o', leg=False):
+def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,               bar=False, c='b', m='-o', leg=False):
     
     tr_key = tr.keys()[0]
     h = np.zeros((len(dic),nbins))
@@ -747,11 +767,14 @@ def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,
         if a==None:
             h[j,:] = np.histogram(x, range=hr[key], bins=nbins)[0]
         elif a==-1:
-            h[j,:] = np.histogram(x[y<tr[tr_key][0]], range=hr[key], bins=nbins)[0]
+            h[j,:] = np.histogram(x[y<tr[tr_key][0]], range=hr[key], 
+                                  bins=nbins)[0]
         elif a==0:
-            h[j,:] = np.histogram(x[(y>tr[tr_key][0]) & (y<tr[tr_key][1])], range=hr[key], bins=nbins)[0]
+            h[j,:] = np.histogram(x[(y>tr[tr_key][0]) & (y<tr[tr_key][1])], 
+                                  range=hr[key], bins=nbins)[0]
         elif a==+1:
-            h[j,:] = np.histogram(x[y>tr[tr_key][1]], range=hr[key], bins=nbins)[0]
+            h[j,:] = np.histogram(x[y>tr[tr_key][1]], 
+                                  range=hr[key], bins=nbins)[0]
   
     hm = np.mean(h,axis=0)
     print(hm, a)
