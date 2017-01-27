@@ -8,7 +8,7 @@ import sys
 
 def defineSystem(): 
     # Create an object of args class from common module 
-    DSargs = cmn.args(name='Toggle switch of two genes X and Y')
+    DSargs = cmn.args(name='Genetic Toggle Switch with SA')
 
     # Initialize the DSargs object with parameters
     DSargs.pars = aux.parameters()
@@ -20,13 +20,14 @@ def defineSystem():
     DSargs.fnspecs = aux.functions()
 
    # Set initial conditions:
+    #DSargs.ics = {'X': 10, 'Y': 10}
     DSargs.ics = {'X': 10, 'Y': 10}
 
     DSargs.xdomain = {'X': [0, 1.0e+4], 'Y':[0, 1.0e+4]}
 
     # Set the range of integration:
-    DSargs.tdomain = [0,100]    
-    return DSargs  
+    DSargs.tdomain = [0,100]
+    return DSargs
 
 def t_dynamics_X(pts): 
     # PyPlot commands
@@ -35,8 +36,8 @@ def t_dynamics_X(pts):
     plt.xlabel('t')       # Axes labels
     plt.ylabel('X')       # ...
     #plt.xlim([0,7000])   
-    plt.ylim([0,200])     # Range of the y axis
-    plt.title(ode.name)   # Figure title from model name
+    plt.ylim([0,600])     # Range of the y axis
+    plt.title(ode.name + ': time dynamics')   # Figure title from model name
     plt.show()
     plt.figure()
 
@@ -47,8 +48,8 @@ def t_dynamics_Y(pts):
     plt.xlabel('t')       # Axes labels
     plt.ylabel('Y')       # ...
     #plt.xlim([0,7000])   
-    plt.ylim([0,200])     # Range of the y axis
-    plt.title(ode.name)   # Figure title from model name
+    plt.ylim([0,600])     # Range of the y axis
+    plt.title(ode.name + ': time dynamics')   # Figure title from model name
     plt.show()
     plt.figure()
 
@@ -60,7 +61,7 @@ def t_dynamics_XY(pts):
     plt.ylabel('Y')      # ...
     #plt.xlim([0,7000])
     plt.ylim([0,800])    # Range of the y axis
-    plt.title(ode.name)  # Figure title from model name
+    plt.title(ode.name + ': time dynamics')   # Figure title from model name
     plt.show()
 
 def t_dynamics_multi_ICs_X(ode):   
@@ -74,7 +75,7 @@ def t_dynamics_multi_ICs_X(ode):
         plt.plot(tmp['t'], tmp['X'])
     plt.xlabel('time')
     plt.ylabel('X')
-    plt.title(ode.name + ' multi ICs')
+    plt.title(ode.name + ': multi ICs')
     plt.show()
 
 def t_dynamics_multi_ICs_Y(ode):   
@@ -123,7 +124,8 @@ def t_dynamics_multi_ICs_Y(ode):
 
 def t_dynamics_multi_ICs_XY(ode):   
     plt.figure()
-    plt.ylim([0,900])
+    #plt.ylim([0,600])
+    plt.ylim([0,1200])
     # Sequences of plot commands will not clear existing figures:
     plt.hold(True) 
     for i, x0 in enumerate(np.linspace(1,1000,4)):
@@ -148,14 +150,14 @@ def getBifDiagrams(ode):
                           LocBifPoints=['LP','B'], bif_startpoint=50, 
                           maxstep=1e+1, minstep=0.01, step=0.1,
                           silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,200], ylim=[0,700], fontsize=10)
+                          xlim=[0,600], ylim=[0,6000], fontsize=10)
     freepar='gY'
     fp=aux.fast_fixedpoint(ode)
     aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
                           LocBifPoints=['LP','B'], bif_startpoint=50, 
                           maxstep=1e+1, minstep=1e-2, step=1e-1, 
                           silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,200], ylim=[0,700], fontsize=10)
+                          xlim=[0,600], ylim=[0,6000], fontsize=10)
     sys.exit(0)
  
     freepar='lX'
@@ -206,7 +208,9 @@ def getNullClines(DSargs, ode):
     nfp=0
     aux.nullclines(['X','Y'], DSargs, stab, fp, nfp=nfp, vlim=vlim,
                    maxpoints=[800,800],
-                   xticks=[0, 100, 200, 300, 400, 500, 600, 700],
+                  #xticks=[0, 200, 400, 600, 800, 1000, 1200, 1400],
+                   xticks=[0, 200, 400, 600, 800],
+                  #yticks=[0, 100, 200, 300, 400, 500, 600, 700,800, 900, 1000],
                    yticks=[0, 100, 200, 300, 400, 500, 600, 700],
                    step=0.01, minstep=0.001, maxstep=10, fs=[4,4], 
                    fontsize=8, silence=False)
@@ -229,5 +233,5 @@ if __name__ == '__main__':
     #t_dynamics_multi_ICs_Y(ode)
     #t_dynamics_multi_ICs_XY(ode)
 
-    getBifDiagrams(ode)
-    #getNullClines(DSargs, ode)
+    #getBifDiagrams(ode)
+    getNullClines(DSargs, ode)
