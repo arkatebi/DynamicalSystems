@@ -630,7 +630,8 @@ def param_sensitivity_bars(list_pars, ODE, DSargs, var, fig_name=False,
         else:
             change[pars] = [0,0] 
     l = change.keys()
-    isort = np.argsort([np.abs(change[i][0])+np.abs(change[i][1]) for i in l])[::-1]
+    isort = np.argsort([np.abs(change[i][0])+
+                        np.abs(change[i][1]) for i in l])[::-1]
 
     figure(figsize=(fs[0],fs[1]), dpi=200)
     plt.bar(range(len(change.keys())), [change[l[i]][0] for i in isort], 
