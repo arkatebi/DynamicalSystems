@@ -196,7 +196,6 @@ def getBifDiagrams(ode):
                           silence=True, fs=[6,6], ics=[fp], 
                           xlim=[0,200], ylim=[0,700], fontsize=10)
  
-
 def getNullClines(DSargs, ode): 
     #ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
     #              'X0':1.0e2, 'Y0':1.0e2,
