@@ -194,13 +194,6 @@ def getBifDiagrams(ode):
 
 
 def getNullClines(DSargs, ode): 
-    #ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
-    #              'X0':1.0e2, 'Y0':1.0e2,
-    #              'nX':3.0, 'nY':3.0,
-    #              'lX':0.1,'lY':0.1,
-    #              'kX':0.10e0, 'kY':0.1e0})
-    #ode.set(ics = {'X': 30, 'Y': 1})
- 
     from PyDSTool.Toolbox import phaseplane as pp
     vlim = {'X': [1, 700], 'Y': [1, 700]}
     fp = aux.eliminate_redundants(pp.find_fixedpoints(ode, n=2, maxsearch=1e+4,
