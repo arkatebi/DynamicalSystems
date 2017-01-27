@@ -7,7 +7,7 @@
 
 <a name="toggleSwitch">
 ### Toggle Switch Gene Network 
-https://github.com/arkatebi/DynamicalSystems/blob/master/toggleSwitch/README-TS.md
+https://github.com/arkatebi/DynamicalSystems/blob/master/toggleSwitch/
 
 ### Source Code
 This is an open source project and the source code is publicly available on 
