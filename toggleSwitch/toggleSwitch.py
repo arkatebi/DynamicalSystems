@@ -124,17 +124,19 @@ def t_dynamics_multi_ICs_Y(ode):
 def t_dynamics_multi_ICs_XY(ode):   
     plt.figure()
     plt.ylim([0,900])
-    plt.hold(True) # Sequences of plot commands will not clear existing figures
+    # Sequences of plot commands will not clear existing figures:
+    plt.hold(True) 
     for i, x0 in enumerate(np.linspace(1,1000,4)):
         for i, y0 in enumerate(np.linspace(1,1000,4)):
-            ode.set(ics = { 'X': x0, 'Y': y0 } )    # Initial condition
+            # Reset the initial conditions in the Vode_ODEsystem object ode:
+            ode.set(ics = { 'X': x0, 'Y': y0 } )    
             # Trajectories are called pol0, pol1, ...
-            # sample them on the fly to create Pointset tmp
+            # Sample them on the fly to create tmp, a Pointset object: 
             tmp = ode.compute('pol%3i' % i).sample()
             plt.plot(tmp['X'], tmp['Y'])
     plt.xlabel('X')
     plt.ylabel('Y')
-    plt.title(ode.name + ': multi ICs for both')
+    #plt.title(ode.name + ': multi ICs for both')
     plt.show()
     #plt.savefig('./figures/parSet-1_tdynamics.pdf')
 
@@ -146,6 +148,23 @@ def getBifDiagrams(ode):
     #              'kX':0.10e0, 'kY':0.1e0})
     #ode.set(ics = {'X': 100, 'Y': 50})
 
+    freepar='gX'
+    fp=aux.fast_fixedpoint(ode)
+    print(fp.values())
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=0.01, step=0.1,
+                          silence=True, fs=[6,6], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
+    freepar='gY'
+    fp=aux.fast_fixedpoint(ode)
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=1e-2, step=1e-1, 
+                          silence=True, fs=[6,6], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
+    sys.exit(0)
+ 
     freepar='lX'
     fp=aux.fast_fixedpoint(ode)
     print(fp.values())
@@ -180,22 +199,7 @@ def getBifDiagrams(ode):
                           silence=True, fs=[6,6], ics=[fp], 
                           xlim=[0,200], ylim=[0,700], fontsize=10)
 
-    freepar='gX'
-    fp=aux.fast_fixedpoint(ode)
-    print(fp.values())
-    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
-                          LocBifPoints=['LP','B'], bif_startpoint=50, 
-                          maxstep=1e+1, minstep=0.01, step=0.1,
-                          silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,200], ylim=[0,700], fontsize=10)
-    freepar='gY'
-    fp=aux.fast_fixedpoint(ode)
-    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
-                          LocBifPoints=['LP','B'], bif_startpoint=50, 
-                          maxstep=1e+1, minstep=1e-2, step=1e-1, 
-                          silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,200], ylim=[0,700], fontsize=10)
- 
+
 def getNullClines(DSargs, ode): 
     #ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
     #              'X0':1.0e2, 'Y0':1.0e2,
@@ -223,10 +227,14 @@ def getNullClines(DSargs, ode):
 
 if __name__ == '__main__': 
     DSargs = defineSystem()
-    ode = dst.Generator.Vode_ODEsystem(DSargs) # instance of 'Generator' class
-    traj = ode.compute('polarization')  # integrate ODE
-    pts = traj.sample(dt=0.01)          # Data for plotting
-
+    # Obtain a Vode_ODEsystem object: 
+    # (similar to VODE from SciPy) 
+    ode = dst.Generator.Vode_ODEsystem(DSargs) 
+    # Obtain a Trajectory object (integrate ODE): 
+    traj = ode.compute('polarization')  
+    # Collect data points as a Pointset object:
+    pts = traj.sample(dt=0.01)          
+     
     #t_dynamics_X(pts)
     #t_dynamics_Y(pts)
     #t_dynamics_XY(pts)
@@ -235,5 +243,5 @@ if __name__ == '__main__':
     #t_dynamics_multi_ICs_Y(ode)
     #t_dynamics_multi_ICs_XY(ode)
 
-    getBifDiagrams(ode)
-    #getNullClines(DSargs, ode)
+    #getBifDiagrams(ode)
+    getNullClines(DSargs, ode)
