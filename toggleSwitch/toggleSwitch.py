@@ -141,13 +141,6 @@ def t_dynamics_multi_ICs_XY(ode):
     #plt.savefig('./figures/parSet-1_tdynamics.pdf')
 
 def getBifDiagrams(ode):
-    #ode.set(pars={'gX':5.0e1, 'gY':5.0e1,
-    #              'X0':1.0e2, 'Y0':1.0e2,
-    #              'nX':3, 'nY':3,
-    #              'lX':0.1,'lY':0.1,
-    #              'kX':0.10e0, 'kY':0.1e0})
-    #ode.set(ics = {'X': 100, 'Y': 50})
-
     freepar='gX'
     fp=aux.fast_fixedpoint(ode)
     print(fp.values())
