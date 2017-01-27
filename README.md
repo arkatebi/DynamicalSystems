@@ -2,11 +2,11 @@
 ## Some Examples of Dynamical Systems
 
 ### Contents
-1\. [Toggle Switch Gene Network] (#toggleSwitch)
+1\. [Genetic Toggle Switch] (#toggleSwitch)
 
 
 <a name="toggleSwitch">
-### Toggle Switch Gene Network 
+### Genetic Toggle Switch 
 https://github.com/arkatebi/DynamicalSystems/blob/master/toggleSwitch/
 
 ### Source Code
