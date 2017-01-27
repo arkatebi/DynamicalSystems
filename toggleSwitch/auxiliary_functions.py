@@ -201,8 +201,13 @@ def fractionStates(X, tr):
         return [np.sum(X<tr[0])/N, np.sum((X>tr[0]) & (X<tr[1]))/N, 
                 np.sum(X>tr[1])/N]
     
-def plot_fractionStates(eqs, p, v, r_v, key, tr, pts_i=None, vlim=None, l=['M','E/M','E'], c=['#e8656c','#e4fc36','#00ff9c'], 
-			show_snapshot=False, nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 'D': ['N'], 'J': ['N']}, fig_name=None):
+#------------------------------------------------------------------------------#
+def plot_fractionStates(eqs, p, v, r_v, key, tr, pts_i=None, vlim=None, 
+                        l=['M','E/M','E'], c=['#e8656c','#e4fc36','#00ff9c'], 
+			show_snapshot=False, 
+                        nsignal_dict={'N': ['D', 'J'], 'I': ['D', 'J'], 
+                                      'D': ['N'], 'J': ['N']}, 
+                        fig_name=None):
     fs = []
     for i in range(len(r_v)):
         if v=='fng':
