@@ -484,7 +484,8 @@ def plot_phasediagram(ODE, freepar, v, r_v, bif_startpoint, keys=False,
                       xlim=False, ylim=False, xticks=False, yticks=False, 
 		      show_continuation=False, maxstep=1e+2, minstep=1e-2, 
                       step=5e+1, maxpoints=500, nrow=None, ncol=None,
-		      LocBifPoints=['LP','B'], BifPoints=['LP'], silence=False,                       fig_name=False, fast_fp=False, returnLPs=False):
+		      LocBifPoints=['LP','B'], BifPoints=['LP'], silence=False,
+                      fig_name=False, fast_fp=False, returnLPs=False):
     if silence:
         class NullDevice():
             def write(self, s):
