@@ -10,15 +10,29 @@ from scipy.ndimage import measurements
 import matplotlib.colors as cl
 import math
 
+def parameters_old():
+    paraDic={'gX': 5.0e+1, 'gY': 5.0e+1, 
+	     'X0': 1.0e+2, 'Y0': 1.0e+2,
+	     'nX': 3.0e0, 'nY': 3.0e0,
+	     'lX': 1.0e-1, 'lY': 1.0e-1,
+	     'kX': 0.1e0, 'kY': 0.1e0
+	    }
+    return paraDic
+
+#------------------------------------------------------------------------------#
 def parameters():
-    dic =  {'gX': 5.0e+1, 'gY': 5.0e+1, 
-	    'X0': 1.0e+2, 'Y0': 1.0e+2,
-	    'nX': 3.0e0, 'nY': 3.0e0,
-	    #'lX': 0.1, 'lY': 0.1,
-	    'lX': 1.0e-1, 'lY': 1.0e-1,
-	    'kX': 0.1e0, 'kY': 0.1e0
-	   }
-    return dic
+    paraDic={#'gX': 5.0e+1, 'gY': 5.0e+1, 
+             'gX': 1.0e+1, 'gY': 9.0e+1, 
+	     #'X0': 1.0e+2, 'Y0': 1.0e+2,
+	     'X0': 1.0e+2, 'Y0': 1.0e+2,
+	    #'nX': 3.0e0,  'nY': 3.0e0,
+	     'nX': 3.0e0,  'nY': 3.0e0,
+	     #'lX': 1.0e+1, 'lY': 1.0e-1,
+	     'lX': 9.0e+1, 'lY': 1.0e-3,
+	     #'kX': 1.0e-1, 'kY': 1.0e-1
+	     'kX': 1.0e-1, 'kY': 1.0e-1
+	    }
+    return paraDic
 
 #------------------------------------------------------------------------------#
 def equations_old(onecell=False):
@@ -30,8 +44,8 @@ def equations_old(onecell=False):
 #------------------------------------------------------------------------------#
 def equations(onecell=False):
     # rhs of the differential equation, including dummy variable 
-    eqnDic={'X': 'gX*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kX*X',
-	    'Y': 'gY*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kY*Y'
+    eqnDic={'X':'gX*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kX*X',
+	    'Y':'gY*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kY*Y'
 	   }
     return eqnDic 
 
@@ -60,7 +74,7 @@ def euler_traj(eqs, p, pts=None, vlim=None, hexagonal=True,
         if vlim==None:
             print('ERROR: Give me a starting point (pts) or the limits for a random start point (vlim)')
             return 0
-        pts = {}   
+        pts = {}
         for j in eqs.keys():
             pts[j] = np.random.uniform(vlim[j][0],vlim[j][1],(p['n'],p['n'])) 
     pts_new = {}
