@@ -680,7 +680,8 @@ def param_sensitivity_bifurcations(DSargs, freepar, key, list_pars,
             PyCont['psensit'].forward()
             PyCont['psensit'].backward()
             
-            PyCont.display((freepar,key), stability=True, axes=(nrow,ncol,i+1),                             color=c[j], linewidth=3)
+            PyCont.display((freepar,key), stability=True, axes=(nrow,ncol,i+1),
+                            color=c[j], linewidth=3)
             plot(0, 0, linewidth=3, color=c[j])
             PyCont.plot.toggleLabels('off')
         plt.title(list_pars[i])
