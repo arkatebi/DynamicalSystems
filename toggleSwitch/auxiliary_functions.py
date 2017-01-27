@@ -14,7 +14,6 @@ def parameters():
     dic =  {'gX': 5.0e+1, 'gY': 5.0e+1, 
 	    'X0': 1.0e+2, 'Y0': 1.0e+2,
 	    'nX': 3.0e0, 'nY': 3.0e0,
-	    #'lX': 0.1, 'lY': 0.1,
 	    'lX': 1.0e-1, 'lY': 1.0e-1,
 	    'kX': 0.1e0, 'kY': 0.1e0
 	   }
@@ -22,11 +21,13 @@ def parameters():
 
 #------------------------------------------------------------------------------#
 def equations(onecell=False):
-    # rhs of the differential equation, including dummy variable 
-    return {'X': 'gX*HS(Y,Y0,nY,lY) - kX*X',
-	    'Y': 'gY*HS(X,X0,nX,lX) - kY*Y'
+    '''
+    rhs of the differential equation, including dummy variable 
+    '''
+    eqnDic={'X':'gX*HS(Y,Y0,nY,lY) - kX*X',
+	    'Y':'gY*HS(X,X0,nX,lX) - kY*Y'
 	   }
-
+    return eqnDic
 #------------------------------------------------------------------------------#
 # Auxilary functions
 #def HS(X,X0,nX,lamb):
