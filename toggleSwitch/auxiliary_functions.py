@@ -273,23 +273,30 @@ def stability(FPs, ODE, eps=0.1):
     return out
 
 #--------------------------------------------------------------------------#
-def PyCont_args(nmodel, freepar, maxnumpoints, maxstep=1e+1, minstep=1e-1, stopAt=['B'],
-                step=1e-0, LocBifPoints=['BP','LP','B'], saveeigen=False, Type='EP-C'):
-    PCargs = PyDSTool.args(name=nmodel, type=Type)    # 'EP-C' stands for Equilibrium Point Curve.
-    PCargs.freepars     = [freepar]                   # control parameter 
-    PCargs.MaxNumPoints = maxnumpoints                # The following 3 parameters are set after trial-and-error
-    PCargs.MaxStepSize  = maxstep
-    PCargs.MinStepSize  = minstep
-    PCargs.StepSize     = step
+def PyCont_args(nmodel, freepar, maxnumpoints, maxstep=1e+1, minstep=1e-1, 
+                stopAt=['B'], step=1e-0, LocBifPoints=['BP','LP','B'], 
+                saveeigen=False, Type='EP-C'):
+    # 'EP-C' stands for Equilibrium Point Curve:
+    PCargs = PyDSTool.args(name=nmodel, type=Type) 
+    # control parameter:
+    PCargs.freepars = [freepar]                   
+    # The following 3 parameters are set after trial-and-error:
+    PCargs.MaxNumPoints = maxnumpoints 
+    PCargs.MaxStepSize = maxstep
+    PCargs.MinStepSize = minstep
+    PCargs.StepSize = step
     PCargs.StopAtPoints = stopAt    
-    PCargs.LocBifPoints = LocBifPoints                # detect limit points / saddle-node bifurcations
-    PCargs.SaveEigen    = saveeigen                   # to tell unstable from stable branches
+    # detect limit points / saddle-node bifurcations:
+    PCargs.LocBifPoints = LocBifPoints                
+    # to tell unstable from stable branches:
+    PCargs.SaveEigen = saveeigen                   
     return PCargs
  
 #--------------------------------------------------------------------------#
 #   Plot functions
 #--------------------------------------------------------------------------#
-def hist_clustersize(dic, keys, tr, clim, norm=True, bars=False, fig_name=None, higher=True):
+def hist_clustersize(dic, keys, tr, clim, norm=True, bars=False, 
+                     fig_name=None, higher=True):
     plt.figure(figsize=(7,5), dpi=200)
     for k in keys:
         h = np.zeros((len(dic),clim[1]-clim[0]+1))
@@ -305,7 +312,7 @@ def hist_clustersize(dic, keys, tr, clim, norm=True, bars=False, fig_name=None, 
             print(n_clusters, 'clusters found')
             a  = measurements.sum(x, xs, index=arange(xs.max() + 1))
             ma = np.max(a) 
-            h[j,:] = np.asarray([np.sum(a==i) for i in np.arange(clim[0],clim[1]+1,1)])
+            h[j,:]=np.asarray([np.sum(a==i) for i in np.arange(clim[0],clim[1]+1,1)])
         hm = np.mean(h,axis=0)
         if norm:
             hm = hm/np.sum(hm)
@@ -325,7 +332,8 @@ def hist_clustersize(dic, keys, tr, clim, norm=True, bars=False, fig_name=None, 
  
 
 #--------------------------------------------------------------------------#
-def plot_fates(dic, keys, tr, colors=['#e8656c','#e4fc36','#00ff9c'], vlim=[0.0, 1.0], ncomb=1, fontsize=16, fig_name=None):
+def plot_fates(dic, keys, tr, colors=['#e8656c','#e4fc36','#00ff9c'], 
+               vlim=[0.0, 1.0], ncomb=1, fontsize=16, fig_name=None):
     plt.figure(figsize=(8,7), dpi=200)
     cmap = cl.ListedColormap(colors)
     for k in keys:
@@ -338,12 +346,14 @@ def plot_fates(dic, keys, tr, colors=['#e8656c','#e4fc36','#00ff9c'], vlim=[0.0,
                 x[x < tr[k][0]] = 0.0
                 x[x > tr[k][1]] = 1.0
                 x[(x<tr[k][1]) & (x>tr[k][0])] = 0.5
-    plt.pcolor(x, edgecolors='k', linewidths=1, cmap=cmap, vmin=vlim[0], vmax=vlim[1])
+    plt.pcolor(x, edgecolors='k', linewidths=1, cmap=cmap, vmin=vlim[0], 
+               vmax=vlim[1])
     if fig_name!=None:
         plt.savefig(fig_name, format='pdf', dpi=200)
 
 #--------------------------------------------------------------------------#
-def plot_pcolors(dic, keys, fs=[10,7], ncol=None, nrow=None, fontsize=12, fig_name=None):
+def plot_pcolors(dic, keys, fs=[10,7], ncol=None, nrow=None, fontsize=12, 
+                 fig_name=None):
     if ncol == None:
         ncol = len(keys)
     if nrow == None:
@@ -622,8 +632,10 @@ def param_sensitivity_bars(list_pars, ODE, DSargs, var, fig_name=False,
     isort = np.argsort([np.abs(change[i][0])+np.abs(change[i][1]) for i in l])[::-1]
 
     figure(figsize=(fs[0],fs[1]), dpi=200)
-    plt.bar(range(len(change.keys())), [change[l[i]][0] for i in isort], color='r', align='center', alpha=0.8)
-    plt.bar(range(len(change.keys())), [change[l[i]][1] for i in isort], color='b', align='center', alpha=0.8)
+    plt.bar(range(len(change.keys())), [change[l[i]][0] for i in isort], 
+            color='r', align='center', alpha=0.8)
+    plt.bar(range(len(change.keys())), [change[l[i]][1] for i in isort], 
+            color='b', align='center', alpha=0.8)
     plt.xticks(np.arange(len(list_pars)+1), [l[i] for i in isort])
     plt.xlim([-1,len(list_pars)])
     plt.ylabel('Change in the signal (%)', fontsize= 18)
@@ -760,9 +772,8 @@ def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
         if fig_name!=None:
             plt.savefig(fig_name, format='pdf', dpi=200)
             
-#--------------------------------------------------------------------------#   
+#------------------------------------------------------------------------------#   
 def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,               bar=False, c='b', m='-o', leg=False):
-    
     tr_key = tr.keys()[0]
     h = np.zeros((len(dic),nbins))
     bar_width = (hr[key][1] - hr[key][0])/float(nbins)
