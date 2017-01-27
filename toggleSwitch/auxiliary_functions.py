@@ -776,7 +776,8 @@ def dist2D(dic, keys, tr={}, fig_name=None, leg=False):
             plt.savefig(fig_name, format='pdf', dpi=200)
             
 #------------------------------------------------------------------------------#   
-def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,               bar=False, c='b', m='-o', leg=False):
+def hist_dist(dic, key, hr, tr={}, a=None, fig_name=None, nbins=10, bar_width=1,
+              bar=False, c='b', m='-o', leg=False):
     tr_key = tr.keys()[0]
     h = np.zeros((len(dic),nbins))
     bar_width = (hr[key][1] - hr[key][0])/float(nbins)
