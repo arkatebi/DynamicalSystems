@@ -1,4 +1,4 @@
 <a name="title" />
-## Toggle Switch Gene Network
+## Genetic Toggle Switch with Self Activation 
 
 [Go to the top] (#title)
