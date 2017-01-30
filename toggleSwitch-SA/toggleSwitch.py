@@ -233,5 +233,5 @@ if __name__ == '__main__':
     #t_dynamics_multi_ICs_Y(ode)
     #t_dynamics_multi_ICs_XY(ode)
 
-    #getBifDiagrams(ode)
-    getNullClines(DSargs, ode)
+    getBifDiagrams(ode)
+    #getNullClines(DSargs, ode)
