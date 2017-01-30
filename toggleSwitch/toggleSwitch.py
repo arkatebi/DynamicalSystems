@@ -221,7 +221,7 @@ if __name__ == '__main__':
     # Collect data points as a Pointset object:
     pts = traj.sample(dt=0.01)          
      
-    #t_dynamics_X(pts)
+    t_dynamics_X(pts)
     #t_dynamics_Y(pts)
     #t_dynamics_XY(pts)
 
@@ -230,4 +230,4 @@ if __name__ == '__main__':
     #t_dynamics_multi_ICs_XY(ode)
 
     #getBifDiagrams(ode)
-    getNullClines(DSargs, ode)
+    #getNullClines(DSargs, ode)
