@@ -11,8 +11,8 @@ def defineSystem():
     DSargs = cmn.args(name='Genetic Toggle Switch with SA')
 
     # Initialize the DSargs object with parameters
-    DSargs.pars = aux.parameters()
-    #DSargs.pars = aux.parameter_set2()
+    #DSargs.pars = aux.parameter_set_1()
+    DSargs.pars = aux.parameter_set_2()
 
     # obtain the differential equations:
     DSargs.varspecs = aux.equations() 
