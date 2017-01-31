@@ -10,7 +10,7 @@ from scipy.ndimage import measurements
 import matplotlib.colors as cl
 import math
 
-def parameters():
+def parameter_set_M():
     dic =  {'gX': 5.0e+1, 'gY': 5.0e+1, 
 	    'X0': 1.0e+2, 'Y0': 1.0e+2,
 	    'nX': 3.0e0, 'nY': 3.0e0,
@@ -20,16 +20,38 @@ def parameters():
     return dic
 
 #------------------------------------------------------------------------------#
-def parameter_set_2():
-    dic =  {'gX': 1.0e-1, 'gY': 1.0e-1, 
-	    'X0': 1.0e+2, 'Y0': 1.0e+2,
-	    'nX': 3.0e0, 'nY': 3.0e0,
-	    #'lX': 1.0e-1, 'lY': 1.0e-1,
-	    'lX': 1.0e+1, 'lY': 1.0e+1,
-	    'kX': 0.1e0, 'kY': 0.1e0
+def parameter_set_1():
+    '''
+      This parameter set gives one stable point. if gX and gY are increased, 
+      the system has three stable points as in the parameter_set_2.
+    '''
+    dic =  {'gX': 1.0e+1, 'gY': 1.0e+1, 
+	    'X0': 1.0e+1, 'Y0': 1.0e+10,
+	    'nX': 3.0e0,  'nY': 3.0e0,
+	    'lX': 5.0e-1, 'lY': 1.0e-1,
+	    'kX': 1.0e-1, 'kY': 1.0e-1
 	   }
     return dic
 
+#------------------------------------------------------------------------------#
+def parameter_set_2():
+    dic =  {'gX': 1.3e+1, 'gY': 1.3e+1, 
+	    'X0': 9.0e+1, 'Y0': 9.0e+1,
+	    'nX': 3.0e0, 'nY': 3.0e0,
+	    'lX': 1.0e-1, 'lY': 1.0e-1,
+	    'kX': 1.0e-1, 'kY': 1.0e-1
+	   }
+    return dic
+
+#------------------------------------------------------------------------------#
+def parameter_set_3():
+    dic =  {'gX': 1.4e+1, 'gY': 1.4e+1, 
+	    'X0': 1.0e+1, 'Y0': 1.0e+1,
+	    'nX': 3.0e0, 'nY': 3.0e0,
+	    'lX': 1.0e-1, 'lY': 1.0e-1,
+	    'kX': 1.0e-1, 'kY': 1.0e-1
+	   }
+    return dic
 
 #------------------------------------------------------------------------------#
 def equations(onecell=False):
@@ -453,7 +475,7 @@ def plot_continuation(ODE, freepar, keys, bif_startpoint,
         PyCont.newCurve(PCargs)
         PyCont[ODE.name].forward()
         PyCont[ODE.name].backward()
-        if showcurve:        
+        if showcurve: 
             for i in range(len(keys)):
                 PyCont.display((freepar,keys[i]), stability=True, 
                                axes=(nrow,ncol,i+1), color='k', linewidth=3)
