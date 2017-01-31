@@ -20,7 +20,6 @@ def parameters_old():
 	    }
     return paraDic
 
-
 #------------------------------------------------------------------------------#
 def parameter_set_1():
     paraDic={'gX': 5.0e+1, 'gY': 5.0e+1, 
@@ -81,19 +80,31 @@ def parameter_set_5():
     return paraDic
 
 #------------------------------------------------------------------------------#
-def equations_old(onecell=False):
+def equations_toggleSwitch(onecell=False):
+    '''
+    For toggle switch with no self-activation
+    '''
     # rhs of the differential equation, including dummy variable 
     return {'X': 'gX*HS(Y,Y0,nY,lY) - kX*X',
 	    'Y': 'gY*HS(X,X0,nX,lX) - kY*Y'
 	   }
 
 #------------------------------------------------------------------------------#
-def equations(onecell=False):
+def equations_old():
+    # rhs of the differential equation, including dummy variable 
+    eqnDic={'X':'gX*HS(XX,XX0,nXX,lXX)*HS(Y,Y0,nY,lY) - kX*X',
+	    'Y':'gY*HS(YY,YY0,nYY,lYY)*HS(X,X0,nX,lX) - kY*Y'
+	   }
+    return eqnDic 
+
+#------------------------------------------------------------------------------#
+def equations():
     # rhs of the differential equation, including dummy variable 
     eqnDic={'X':'gX*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kX*X',
 	    'Y':'gY*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kY*Y'
 	   }
     return eqnDic 
+
 
 #------------------------------------------------------------------------------#
 # Auxilary functions
