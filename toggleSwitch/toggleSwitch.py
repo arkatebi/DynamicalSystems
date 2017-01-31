@@ -11,8 +11,8 @@ def defineSystem():
     DSargs = cmn.args(name='Toggle switch of two genes X and Y')
 
     # Initialize the DSargs object with parameters
-    DSargs.pars = aux.parameters()
-    #DSargs.pars = aux.parameter_set2()
+    #DSargs.pars = aux.parameters()
+    DSargs.pars = aux.parameter_set_2()
 
     # obtain the differential equations:
     DSargs.varspecs = aux.equations() 
@@ -141,30 +141,13 @@ def t_dynamics_multi_ICs_XY(ode):
     #plt.savefig('./figures/parSet-1_tdynamics.pdf')
 
 def getBifDiagrams(ode):
-    freepar='gX'
-    fp=aux.fast_fixedpoint(ode)
-    print(fp.values())
-    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
-                          LocBifPoints=['LP','B'], bif_startpoint=50, 
-                          maxstep=1e+1, minstep=0.01, step=0.1,
-                          silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,200], ylim=[0,700], fontsize=10)
-    freepar='gY'
-    fp=aux.fast_fixedpoint(ode)
-    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
-                          LocBifPoints=['LP','B'], bif_startpoint=50, 
-                          maxstep=1e+1, minstep=1e-2, step=1e-1, 
-                          silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,200], ylim=[0,700], fontsize=10)
-    sys.exit(0)
- 
     freepar='lX'
     fp=aux.fast_fixedpoint(ode)
     print(fp.values())
     aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
                           LocBifPoints=['LP','B'], bif_startpoint=50, 
                           maxstep=1e+1, minstep=0.01, step=0.1,
-                          silence=True, fs=[6,6], ics=[fp], 
+                          silence=True, fs=[4,4], ics=[fp], 
                           xlim=[0,200], ylim=[0,700], fontsize=10)
     freepar='lY'
     fp=aux.fast_fixedpoint(ode)
@@ -172,7 +155,42 @@ def getBifDiagrams(ode):
     aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
                           LocBifPoints=['LP','B'], bif_startpoint=50, 
                           maxstep=1e+1, minstep=0.01, step=0.1,
-                          silence=True, fs=[6,6], ics=[fp], 
+                          silence=True, fs=[4,4], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
+    sys.exit(0)
+
+    freepar='kX'
+    fp=aux.fast_fixedpoint(ode)
+    print(fp.values())
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=0.01, step=0.1,
+                          silence=True, fs=[4,4], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
+    freepar='kY'
+    fp=aux.fast_fixedpoint(ode)
+    print(fp.values())
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=0.01, step=0.1,
+                          silence=True, fs=[4,4], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
+
+    sys.exit(0)
+    freepar='gX'
+    fp=aux.fast_fixedpoint(ode)
+    print(fp.values())
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=0.01, step=0.1,
+                          silence=True, fs=[4,4], ics=[fp], 
+                          xlim=[0,200], ylim=[0,700], fontsize=10)
+    freepar='gY'
+    fp=aux.fast_fixedpoint(ode)
+    aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
+                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          maxstep=1e+1, minstep=1e-2, step=1e-1, 
+                          silence=True, fs=[4,4], ics=[fp], 
                           xlim=[0,200], ylim=[0,700], fontsize=10)
     sys.exit(0)
     freepar='kX'
@@ -191,7 +209,6 @@ def getBifDiagrams(ode):
                           maxstep=1e+1, minstep=0.01, step=0.1,
                           silence=True, fs=[6,6], ics=[fp], 
                           xlim=[0,200], ylim=[0,700], fontsize=10)
-
 
 def getNullClines(DSargs, ode): 
     from PyDSTool.Toolbox import phaseplane as pp
@@ -221,7 +238,7 @@ if __name__ == '__main__':
     # Collect data points as a Pointset object:
     pts = traj.sample(dt=0.01)          
      
-    t_dynamics_X(pts)
+    #t_dynamics_X(pts)
     #t_dynamics_Y(pts)
     #t_dynamics_XY(pts)
 
@@ -229,5 +246,5 @@ if __name__ == '__main__':
     #t_dynamics_multi_ICs_Y(ode)
     #t_dynamics_multi_ICs_XY(ode)
 
-    #getBifDiagrams(ode)
+    getBifDiagrams(ode)
     #getNullClines(DSargs, ode)
