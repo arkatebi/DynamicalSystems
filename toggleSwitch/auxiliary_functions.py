@@ -20,6 +20,18 @@ def parameters():
     return dic
 
 #------------------------------------------------------------------------------#
+def parameter_set_2():
+    dic =  {'gX': 1.0e-1, 'gY': 1.0e-1, 
+	    'X0': 1.0e+2, 'Y0': 1.0e+2,
+	    'nX': 3.0e0, 'nY': 3.0e0,
+	    #'lX': 1.0e-1, 'lY': 1.0e-1,
+	    'lX': 1.0e+1, 'lY': 1.0e+1,
+	    'kX': 0.1e0, 'kY': 0.1e0
+	   }
+    return dic
+
+
+#------------------------------------------------------------------------------#
 def equations(onecell=False):
     '''
     rhs of the differential equation, including dummy variable 
