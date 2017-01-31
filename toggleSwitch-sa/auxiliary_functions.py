@@ -45,6 +45,42 @@ def parameter_set_2():
     return paraDic
 
 #------------------------------------------------------------------------------#
+def parameter_set_3():
+    paraDic={#'gX': 5.0e+1, 'gY': 5.0e+1, 
+             'gX': 1.0e+1, 'gY': 1.0e+1, 
+	     'X0': 1.0e+2, 'Y0': 1.0e+1,
+	     'nX': 3.0e1,  'nY': 1.0e+1,
+	     'lX': 1.0e+1, 'lY': 1.0e-1,
+	     'kX': 1.0e-1, 'kY': 1.0e-1
+	    }
+    return paraDic
+
+#------------------------------------------------------------------------------#
+def parameter_set_4():
+    '''
+    This set gives two stable points.
+    ''' 
+    paraDic={#'gX': 5.0e+1, 'gY': 5.0e+1, 
+             'gX': 3.0e+1, 'gY': 1.0e+1, 
+	     'X0': 1.0e+2, 'Y0': 1.0e+1,
+	     'nX': 3.0e+1, 'nY': 1.0e+1,
+	     'lX': 1.0e+1, 'lY': 1.0e-1,
+	     'kX': 1.0e-1, 'kY': 1.0e-1
+	    }
+    return paraDic
+
+#------------------------------------------------------------------------------#
+def parameter_set_5():
+    paraDic={#'gX': 5.0e+1, 'gY': 5.0e+1, 
+             'gX': 9.0e+1, 'gY': 1.0e+1, 
+	     'X0': 1.0e+2, 'Y0': 1.0e+1,
+	     'nX': 3.0e+1, 'nY': 1.0e+1,
+	     'lX': 1.0e+1, 'lY': 1.0e-1,
+	     'kX': 1.0e-1, 'kY': 1.0e-1
+	    }
+    return paraDic
+
+#------------------------------------------------------------------------------#
 def equations_old(onecell=False):
     # rhs of the differential equation, including dummy variable 
     return {'X': 'gX*HS(Y,Y0,nY,lY) - kX*X',
