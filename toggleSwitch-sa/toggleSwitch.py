@@ -11,8 +11,9 @@ def defineSystem():
     DSargs = cmn.args(name='Genetic Toggle Switch with SA')
 
     # Initialize the DSargs object with parameters
-    DSargs.pars = aux.parameter_set_1()
+    #DSargs.pars = aux.parameter_set_1()
     #DSargs.pars = aux.parameter_set_2()
+    DSargs.pars = aux.parameter_set_3()
 
     # obtain the differential equations:
     DSargs.varspecs = aux.equations() 
@@ -146,17 +147,17 @@ def getBifDiagrams(ode):
     fp=aux.fast_fixedpoint(ode)
     print(fp.values())
     aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
-                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          LocBifPoints=['LP','B'], bif_startpoint=20, 
                           maxstep=1e+1, minstep=0.01, step=0.1,
-                          silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,600], ylim=[0,6000], fontsize=10)
+                          silence=True, fs=[4,4], ics=[fp], 
+                          xlim=[0,10], ylim=[0,3000], fontsize=10)
     freepar='gY'
     fp=aux.fast_fixedpoint(ode)
     aux.plot_continuation(ode, freepar, keys=['X','Y'], ncol=2, nrow=1, 
-                          LocBifPoints=['LP','B'], bif_startpoint=50, 
+                          LocBifPoints=['LP','B'], bif_startpoint=20, 
                           maxstep=1e+1, minstep=1e-2, step=1e-1, 
-                          silence=True, fs=[6,6], ics=[fp], 
-                          xlim=[0,600], ylim=[0,6000], fontsize=10)
+                          silence=True, fs=[4,4], ics=[fp], 
+                          xlim=[0,10], ylim=[0,3000], fontsize=10)
     sys.exit(0)
  
     freepar='lX'
@@ -196,7 +197,7 @@ def getBifDiagrams(ode):
 
 def getNullClines(DSargs, ode): 
     from PyDSTool.Toolbox import phaseplane as pp
-    vlim = {'X': [1, 1400], 'Y': [1, 400]}
+    vlim = {'X': [1, 1200], 'Y': [1, 1200]}
     fp = aux.eliminate_redundants(pp.find_fixedpoints(ode, n=2, maxsearch=1e+4,
                                                      eps=1e-12),
                                                      4)
@@ -208,10 +209,10 @@ def getNullClines(DSargs, ode):
     aux.nullclines(['X','Y'], DSargs, stab, fp, nfp=nfp, vlim=vlim,
                    maxpoints=[400,400],
                   #xticks=[0, 200, 400, 600, 800, 1000, 1200, 1400],
-                  xticks=[0, 400, 800, 1200, 1600, 2000, 2400],
-                  # xticks=[0, 200, 400],
-                  yticks=[0, 100, 200, 300, 400, 500, 600, 700,800, 900, 1000],
-                  # yticks=[0, 100, 200, 300, 400],
+                  #xticks=[0, 400, 800, 1200, 1600, 2000, 2400],
+                   xticks=[0, 200, 400, 600, 800, 1000, 1200],
+                  #yticks=[0, 100, 200, 300, 400, 500, 600, 700,800, 900, 1000],
+                   yticks=[0, 100, 200, 300, 400, 600, 800, 1000, 1200],
                    step=0.01, minstep=0.001, maxstep=10, fs=[4,4], 
                    fontsize=8, silence=False)
 
@@ -233,5 +234,5 @@ if __name__ == '__main__':
     #t_dynamics_multi_ICs_Y(ode)
     #t_dynamics_multi_ICs_XY(ode)
 
-    getBifDiagrams(ode)
-    #getNullClines(DSargs, ode)
+    #getBifDiagrams(ode)
+    getNullClines(DSargs, ode)
