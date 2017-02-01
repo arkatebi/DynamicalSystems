@@ -13,9 +13,9 @@ import math
 def parameter_set_M():
     dic =  {'gX': 5.0e+1, 'gY': 5.0e+1, 
 	    'X0': 1.0e+2, 'Y0': 1.0e+2,
-	    'nX': 3.0e0, 'nY': 3.0e0,
+	    'nX': 3.0e0,  'nY': 3.0e0,
 	    'lX': 1.0e-1, 'lY': 1.0e-1,
-	    'kX': 0.1e0, 'kY': 0.1e0
+	    'kX': 0.1e0,  'kY': 0.1e0
 	   }
     return dic
 
