@@ -21,27 +21,53 @@ def parameters_old():
 
 #------------------------------------------------------------------------------#
 def parameter_set_1():
-    paraDic={'gX'  : 5.0e+1, 'gY' : 1.0e+1, 
-	     'X0'  : 1.0e+1, 'Y0' : 1.0e+1,
-	     'nX'  : 3.0e0,  'nY' : 3.0e0,
-             'nXX' : 3.0e0,  'nYY': 3.00e0,
-	     'lX' : 1.0e-1,  'lY' : 1.0e-1,
-	     'lXX': 1.0e+1,  'lYY': 1.0e+1,
-	     'kX' : 1.0e-1,  'kY' : 1.0e-1,
-	     'kXX': 1.0e-1,  'kYY': 1.0e-1
+    paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
+	     'X0' : 1.0e+2, 'Y0' : 1.0e+2,
+	     'XX0': 1.0e+2, 'YY0': 1.0e+2,
+	     'nX' : 3.0e0,  'nY' : 3.0e0,
+             'nXX': 3.0e0,  'nYY': 3.0e0,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1,
+	     'lXX': 1.0e+1, 'lYY': 1.0e+1,
+	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
 	    }
     return paraDic
  
 #------------------------------------------------------------------------------#
 def parameter_set_2():
+    paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
+	     'X0' : 4.0e+2, 'Y0' : 4.0e+2,
+	     'XX0': 1.0e+2, 'YY0': 1.0e+2,
+	     'nX' : 3.0e0,  'nY' : 3.0e0,
+             'nXX': 3.0e0,  'nYY': 3.0e0,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1,
+	     'lXX': 1.0e+1, 'lYY': 1.0e+1,
+	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
+	    }
+    return paraDic
+ 
+#------------------------------------------------------------------------------#
+def parameter_set_3():
+    paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
+	     'X0' : 1.0e+2, 'Y0' : 1.0e+2,
+	     'XX0': 4.0e+2, 'YY0': 4.0e+2,
+	     'nX' : 3.0e0,  'nY' : 3.0e0,
+             'nXX': 3.0e0,  'nYY': 3.0e0,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1,
+	     'lXX': 1.0e+1, 'lYY': 1.0e+1,
+	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
+	    }
+    return paraDic
+ 
+#------------------------------------------------------------------------------#
+def parameter_set_4():
     paraDic={'gX' : 5.0e+1, 'gY' : 1.0e+1, 
 	     'X0' : 1.0e+1, 'Y0' : 1.0e+1,
+	     'XX0': 1.0e+1, 'YY0': 1.0e+1,
 	     'nX' : 3.0e0,  'nY' : 3.0e0,
              'nXX': 2.0e0,  'nYY': 2.00e0,
 	     'lX' : 1.0e-1, 'lY' : 1.0e-1, # for inhibition: lX,lY<1.0
 	     'lXX': 1.0e+1, 'lYY': 2.0e+1, # for self-activation: lXX, lYY > 1.0
 	     'kX' : 2.0e-1, 'kY' : 1.0e-1,
-	     'kXX': 5.0e-1, 'kYY': 1.0e-1
 	    }
     return paraDic
  
@@ -58,16 +84,8 @@ def equations_toggleSwitch(onecell=False):
 #------------------------------------------------------------------------------#
 def equations():
     # rhs of the differential equation, including dummy variable 
-    eqnDic={'X':'gX*HS(X,X0,nXX,lXX)*HS(Y,Y0,nY,lY) - kX*X',
-	    'Y':'gY*HS(Y,Y0,nYY,lYY)*HS(X,X0,nX,lX) - kY*Y'
-	   }
-    return eqnDic 
-
-#------------------------------------------------------------------------------#
-def equations_old():
-    # rhs of the differential equation, including dummy variable 
-    eqnDic={'X':'gX*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kX*X',
-	    'Y':'gY*HS(X,X0,nX,lX)*HS(Y,Y0,nY,lY) - kY*Y'
+    eqnDic={'X':'gX*HS(X,XX0,nXX,lXX)*HS(Y,Y0,nY,lY) - kX*X',
+	    'Y':'gY*HS(Y,YY0,nYY,lYY)*HS(X,X0,nX,lX) - kY*Y'
 	   }
     return eqnDic 
 
