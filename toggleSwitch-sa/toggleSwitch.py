@@ -13,8 +13,6 @@ def defineSystem():
     # Initialize the DSargs object with parameters
     DSargs.pars = aux.parameter_set_1()
     #DSargs.pars = aux.parameter_set_2()
-    #DSargs.pars = aux.parameter_set_3() # gives interesting intersection
-    #DSargs.pars = aux.parameter_set_4()
 
     # obtain the differential equations:
     DSargs.varspecs = aux.equations() 
@@ -22,8 +20,7 @@ def defineSystem():
     DSargs.fnspecs = aux.functions()
 
    # Set initial conditions:
-    #DSargs.ics = {'X': 10, 'Y': 10}
-    DSargs.ics = {'X': 10, 'Y': 10}
+    DSargs.ics = {'X': 1, 'Y': 1}
 
     DSargs.xdomain = {'X': [0, 1.0e+4], 'Y':[0, 1.0e+4]}
 
@@ -211,9 +208,10 @@ def getNullClines(DSargs, ode):
     aux.nullclines(['X','Y'], DSargs, stab, fp, nfp=nfp, vlim=vlim,
                    maxpoints=[400,400],
                   #xticks=[0, 200, 400, 600, 800, 1000, 1200, 1400],
-                   xticks=[0, 200, 400],
-                  #yticks=[0, 100, 200, 300, 400, 500, 600, 700,800, 900, 1000],
-                   yticks=[0, 100, 200, 300, 400],
+                  xticks=[0, 400, 800, 1200, 1600, 2000, 2400],
+                  # xticks=[0, 200, 400],
+                  yticks=[0, 100, 200, 300, 400, 500, 600, 700,800, 900, 1000],
+                  # yticks=[0, 100, 200, 300, 400],
                    step=0.01, minstep=0.001, maxstep=10, fs=[4,4], 
                    fontsize=8, silence=False)
 
@@ -235,5 +233,5 @@ if __name__ == '__main__':
     #t_dynamics_multi_ICs_Y(ode)
     #t_dynamics_multi_ICs_XY(ode)
 
-    #getBifDiagrams(ode)
-    getNullClines(DSargs, ode)
+    getBifDiagrams(ode)
+    #getNullClines(DSargs, ode)
