@@ -11,43 +11,37 @@ import matplotlib.colors as cl
 import math
 
 def parameter_set_M():
+    '''
+    This parameter set gives distinct bistability. 
+    '''
     dic =  {'gX': 5.0e+1, 'gY': 5.0e+1, 
 	    'X0': 1.0e+2, 'Y0': 1.0e+2,
 	    'nX': 3.0e0,  'nY': 3.0e0,
 	    'lX': 1.0e-1, 'lY': 1.0e-1,
-	    'kX': 0.1e0,  'kY': 0.1e0
+	    'kX': 1.0e-1, 'kY': 1.0e-1
 	   }
     return dic
-
 #------------------------------------------------------------------------------#
 def parameter_set_1():
     '''
-      This parameter set gives one stable point. if gX and gY are increased, 
-      the system has three stable points as in the parameter_set_2.
+      This parameter set gives THREE stable points consecutively. 
     '''
-    dic =  {'gX': 1.0e+1, 'gY': 1.0e+1, 
-	    'X0': 1.0e+1, 'Y0': 1.0e+10,
-	    'nX': 3.0e0,  'nY': 3.0e0,
-	    'lX': 5.0e-1, 'lY': 1.0e-1,
+    dic =  {'gX': 1.4e+1, 'gY': 1.4e+1, 
+	    'X0': 1.0e+1, 'Y0': 1.0e+1,
+	    'nX': 3.0e0, 'nY': 3.0e0,
+	    'lX': 1.0e-1, 'lY': 1.0e-1,
 	    'kX': 1.0e-1, 'kY': 1.0e-1
 	   }
     return dic
 
 #------------------------------------------------------------------------------#
 def parameter_set_2():
-    dic =  {'gX': 1.3e+1, 'gY': 1.3e+1, 
-	    'X0': 9.0e+1, 'Y0': 9.0e+1,
-	    'nX': 3.0e0, 'nY': 3.0e0,
-	    'lX': 1.0e-1, 'lY': 1.0e-1,
-	    'kX': 1.0e-1, 'kY': 1.0e-1
-	   }
-    return dic
-
-#------------------------------------------------------------------------------#
-def parameter_set_3():
-    dic =  {'gX': 1.4e+1, 'gY': 1.4e+1, 
-	    'X0': 1.0e+1, 'Y0': 1.0e+1,
-	    'nX': 3.0e0, 'nY': 3.0e0,
+    '''
+      This parameter set gives ONE stable point. 
+    '''
+    dic =  {'gX': 1.0e+1, 'gY': 1.0e+1, 
+	    'X0': 1.0e+2, 'Y0': 1.0e+2,
+	    'nX': 3.0e0,  'nY': 3.0e0,
 	    'lX': 1.0e-1, 'lY': 1.0e-1,
 	    'kX': 1.0e-1, 'kY': 1.0e-1
 	   }
