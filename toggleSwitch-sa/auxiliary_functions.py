@@ -11,7 +11,10 @@ import matplotlib.colors as cl
 import math
 
 def parameters_old():
-    paraDic={'gX': 5.0e+1, 'gY': 5.0e+1, 
+    '''
+    Parameter set M for toggle switch system (with no self activation).
+    '''
+    paraDic={'gX': 5.0e+1, 'gY': 5.0e+1,
 	     'X0': 1.0e+2, 'Y0': 1.0e+2,
 	     'nX': 3.0e0, 'nY': 3.0e0,
 	     'lX': 1.0e-1, 'lY': 1.0e-1,
@@ -21,6 +24,10 @@ def parameters_old():
 
 #------------------------------------------------------------------------------#
 def parameter_set_1():
+    '''
+    This parameter set gives three fixed points: two stable and one 
+    unstable.
+    '''
     paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
 	     'X0' : 1.0e+2, 'Y0' : 1.0e+2,
 	     'XX0': 1.0e+2, 'YY0': 1.0e+2,
@@ -48,18 +55,72 @@ def parameter_set_2():
 #------------------------------------------------------------------------------#
 def parameter_set_3():
     paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
-	     'X0' : 1.0e+2, 'Y0' : 1.0e+2,
-	     'XX0': 4.0e+2, 'YY0': 4.0e+2,
+	     'X0' : 5.0e+2, 'Y0' : 5.0e+2,
+	     'XX0': 1.0e+2, 'YY0': 1.0e+2,
 	     'nX' : 3.0e0,  'nY' : 3.0e0,
              'nXX': 3.0e0,  'nYY': 3.0e0,
-	     'lX' : 1.0e-1, 'lY' : 1.0e-1,
-	     'lXX': 1.0e+1, 'lYY': 1.0e+1,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1, # inhibition: lX < 1.0
+	     'lXX': 1.0e+1, 'lYY': 1.0e+1, # activation: lXX > 1.0
+	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
+	    }
+    return paraDic
+
+#------------------------------------------------------------------------------#
+def parameter_set_4():
+    paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
+	     'X0' : 5.0e+2, 'Y0' : 5.0e+2,
+	     'XX0': 1.5e+2, 'YY0': 1.5e+2,
+	     'nX' : 3.0e0,  'nY' : 3.0e0,
+             'nXX': 3.0e0,  'nYY': 3.0e0,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1, # inhibition: lX < 1.0
+	     'lXX': 1.0e+1, 'lYY': 1.0e+1, # activation: lXX > 1.0
 	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
 	    }
     return paraDic
  
 #------------------------------------------------------------------------------#
-def parameter_set_4():
+def parameter_set_5():
+    paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
+	     'X0' : 5.0e+2, 'Y0' : 5.0e+2,
+	     'XX0': 1.0e+2, 'YY0': 1.0e+2,
+	     'nX' : 3.0e0,  'nY' : 3.0e0,
+             'nXX': 3.0e0,  'nYY': 3.0e0,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1, # inhibition: lX < 1.0
+	     'lXX': 1.1e+1, 'lYY': 1.1e+1, # activation: lXX > 1.0
+	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
+	    }
+    return paraDic
+ 
+#------------------------------------------------------------------------------#
+def parameter_set_6():
+    paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
+	     'X0' : 1.0e+2, 'Y0' : 1.0e+2,
+	     'XX0': 2.0e+2, 'YY0': 2.0e+2,
+	     'nX' : 3.0e0,  'nY' : 3.0e0,
+             'nXX': 3.0e0,  'nYY': 3.0e0,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1, # inhibition: lX < 1.0
+	     'lXX': 1.1e+1, 'lYY': 1.1e+1, # activation: lXX > 1.0
+	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
+	    }
+    return paraDic
+ #------------------------------------------------------------------------------#
+def parameter_set_7():
+    paraDic={'gX' : 1.0e+1, 'gY' : 1.0e+1, 
+	     'X0' : 1.0e+2, 'Y0' : 1.0e+2,
+	     'XX0': 4.0e+2, 'YY0': 4.0e+2,
+	     'nX' : 3.0e0,  'nY' : 3.0e0,
+             'nXX': 3.0e0,  'nYY': 3.0e0,
+	     'lX' : 1.0e-1, 'lY' : 1.0e-1, # inhibition: lX < 1.0
+	     'lXX': 1.1e+1, 'lYY': 1.1e+1, # activation: lXX > 1.0
+	     'kX' : 1.0e-1, 'kY' : 1.0e-1,
+	    }
+    return paraDic
+ 
+#------------------------------------------------------------------------------#
+def parameter_set_X():
+    '''
+    This parameter set gives only one fixed point. 
+    '''
     paraDic={'gX' : 5.0e+1, 'gY' : 1.0e+1, 
 	     'X0' : 1.0e+1, 'Y0' : 1.0e+1,
 	     'XX0': 1.0e+1, 'YY0': 1.0e+1,
