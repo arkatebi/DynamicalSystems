@@ -134,8 +134,8 @@ def t_dynamics_multi_ICs_Y(ode):
 #------------------------------------------------------------------------------#
 def t_dynamics_multi_ICs_XY(ode):   
     plt.figure()
-    plt.ylim([0,200])
-    plt.xlim([0,200])
+    plt.ylim([0,400])
+    plt.xlim([0,400])
     # Sequences of plot commands will not clear existing figures:
     plt.hold(True) 
     for i, x0 in enumerate(np.linspace(1,1000,4)):
@@ -244,8 +244,8 @@ if __name__ == '__main__':
 
     #t_dynamics_multi_ICs_X(ode)
     #t_dynamics_multi_ICs_Y(ode)
-    #t_dynamics_multi_ICs_XY(ode)
+    t_dynamics_multi_ICs_XY(ode)
 
     #getBifDiagrams(ode)
 
-    getNullClines(DSargs, ode)
+    #getNullClines(DSargs, ode)
