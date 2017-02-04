@@ -321,7 +321,7 @@ def plot_fractionStates(eqs, p, v, r_v, key, tr, pts_i=None, vlim=None,
         plt.savefig(fig_name, format='pdf', dpi=200)
     plt.show()
 
-#--------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#
 def eliminate_redundants(fp, eps=10):
     for i in range(len(fp)):
         for k, v in fp[i].items():
