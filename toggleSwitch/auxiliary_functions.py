@@ -126,6 +126,63 @@ def parameter_set_8():
     return dic
 
 #------------------------------------------------------------------------------#
+def parameter_st_1():
+    '''
+    This parameter set reduces bistability. 
+    '''
+    from collections import OrderedDict
+    pars = OrderedDict() 
+    pars['gX'] = 5.0e0
+    pars['gY'] = 5.0e0
+    pars['X0'] = 1.0e+1
+    pars['Y0'] = 1.0e+1
+    pars['kX'] = 1.0e-1
+    pars['kY'] = 1.0e-1
+    pars['nX'] = 3.0e0
+    pars['nY'] = 3.0e0
+    pars['lX'] = 1.0e-1
+    pars['lY'] = 1.0e-1
+    return pars 
+
+#------------------------------------------------------------------------------#
+def parameter_st_2():
+    '''
+    This parameter set reduces bistability. 
+    '''
+    from collections import OrderedDict
+    pars = OrderedDict() 
+    pars['gX'] = 5.0e1
+    pars['gY'] = 5.0e1
+    pars['X0'] = 5.0e+1
+    pars['Y0'] = 5.0e+1
+    pars['kX'] = 1.0e-1
+    pars['kY'] = 1.0e-1
+    pars['nX'] = 3.0e0
+    pars['nY'] = 3.0e0
+    pars['lX'] = 1.0e-1
+    pars['lY'] = 1.0e-1
+    return pars 
+
+#------------------------------------------------------------------------------#
+def parameter_st_3():
+    '''
+    This parameter set reduces bistability. 
+    '''
+    from collections import OrderedDict
+    pars = OrderedDict() 
+    pars['gX'] = 5.0e0
+    pars['gY'] = 5.0e0
+    pars['X0'] = 1.0e+1
+    pars['Y0'] = 1.0e+1
+    pars['kX'] = 1.0e-1
+    pars['kY'] = 1.0e-1
+    pars['nX'] = 3.0e0
+    pars['nY'] = 3.0e0
+    pars['lX'] = 1.0e-1
+    pars['lY'] = 1.0e-1
+    return pars 
+
+#------------------------------------------------------------------------------#
 def equations(onecell=False):
     '''
     rhs of the differential equation, including dummy variable 
