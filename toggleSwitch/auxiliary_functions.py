@@ -99,6 +99,31 @@ def parameter_set_6():
 	    'kX': 1.0e-1, 'kY': 1.0e-1
 	   }
     return dic
+#------------------------------------------------------------------------------#
+def parameter_set_7():
+    '''
+    This parameter set reduces bistability. 
+    '''
+    dic =  {'gX': 1.0e+1, 'gY': 1.0e+1, 
+	    'X0': 2.0e+1, 'Y0': 2.0e+1,
+	    'nX': 3.0e0,  'nY': 3.0e0,
+	    'lX': 1.0e-1, 'lY': 1.0e-1,
+	    'kX': 1.0e-1, 'kY': 1.0e-1
+	   }
+    return dic
+
+#------------------------------------------------------------------------------#
+def parameter_set_8():
+    '''
+    This parameter set reduces bistability. 
+    '''
+    dic =  {'gX': 5.0e0, 'gY': 5.0e0, 
+	    'X0': 1.0e+1, 'Y0': 1.0e+1,
+	    'nX': 3.0e0,  'nY': 3.0e0,
+	    'lX': 1.0e-1, 'lY': 1.0e-1,
+	    'kX': 1.0e-1, 'kY': 1.0e-1
+	   }
+    return dic
 
 #------------------------------------------------------------------------------#
 def equations(onecell=False):
