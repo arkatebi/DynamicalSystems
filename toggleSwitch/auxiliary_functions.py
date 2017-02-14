@@ -128,7 +128,7 @@ def parameter_set_8():
 #------------------------------------------------------------------------------#
 def parameter_st_1():
     '''
-    This parameter set reduces bistability. 
+    This parameter set gives fast switching. 
     '''
     from collections import OrderedDict
     pars = OrderedDict() 
@@ -147,7 +147,7 @@ def parameter_st_1():
 #------------------------------------------------------------------------------#
 def parameter_st_2():
     '''
-    This parameter set reduces bistability. 
+    This parameter set reducing switching time slightly. 
     '''
     from collections import OrderedDict
     pars = OrderedDict() 
@@ -166,7 +166,7 @@ def parameter_st_2():
 #------------------------------------------------------------------------------#
 def parameter_st_3():
     '''
-    This parameter set reduces bistability. 
+    This parameter set incurs very slow switching. 
     '''
     from collections import OrderedDict
     pars = OrderedDict() 
