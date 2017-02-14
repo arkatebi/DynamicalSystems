@@ -133,52 +133,6 @@ def run_simulation(pars, vars, tmax):
         count+=1
     return None
 
-def run_simulation_old(pars, vars, tmax):
-    '''
-    This method repeatedly performs the following tasks: 
-    (1) Calculate propensities for each reaction as a function of the current
-        state of the system.
-    (2) Stochastically chooses the wait time (dt) for the next reaction to 
-        occur.  
-    (3) Stochastically selects the next reaction to occur and update the 
-        system after the reaction is performed.
-    '''
-    import numpy as np
-
-    #initialize current time:
-    tc=0
-    #iteration counter:
-    factor=1000
-    count = 0
-    #run the simulation using Gillespie's Direct Method:
-    while(tc<tmax):
-        #calculate propensities:
-        pR1,pR2,pR3,pR4=calculate_propensities(pars, vars)
-        #pros = calculate_propensities(pars, vars)
-        Rtotal= pR1+pR2+pR3+pR4
-        #ptotal=sum(pros) #total propensity
-        #if(not ptotal):
-        if(not Rtotal):
-            continue
-        #save configuration at multiple of 'factor' timesteps:
-        if (not (count%factor)):
-            print(tc, ' ', vars.get('X'), ' ', vars.get('Y'))
-
-        #perform specific reaction based on propensity values:
-        vars=perform_sp_reaction_old(vars,pR1/Rtotal,pR2/Rtotal,
-                                      pR3/Rtotal,pR4/Rtotal)
-        #vars=perform_sp_reaction(vars, pros)
-
-        if(vars.get('X')<0 or vars.get('Y')<0):
-            return None
-        #obtain wait time dt from exponential distribution:
-        lambd=Rtotal # lambd = 1/mean where mean = 1/Rtotal
-        #lambd=ptotal # lambd = 1/mean where mean = 1/Rtotal
-        dt=random.expovariate(lambd)
-        tc+=dt
-        count+=1
-    return None
-
 #-----------------------------------------------------------------------------#
 def plot_trajectory(series_cnt, series_X, series_Y):
     import pylab as pl 
