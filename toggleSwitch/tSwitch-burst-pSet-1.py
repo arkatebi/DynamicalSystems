@@ -35,7 +35,7 @@ def defineSystem():
     vars['X'] = 100 
     vars['Y'] = 100
     vars['Px'] = 0 
-    vars['Py'] = 1
+    vars['Py'] = 0
     #set simulation time: 
     tmax=5.0e+6
     return (pars,vars,tmax)
@@ -44,7 +44,7 @@ def defineSystem():
 def calculate_propensities(pars, vars):
     '''
     This method calculates the propensitites for all reactions happening at the 
-    current state. Each subsystem can be in two states: Promoter is ON or OFF. 
+    current state. Each subsystem can be in two states: promoter is ON or OFF. 
     The status of the promoter of two subsystems are stored in variables Px and
     Py, respectively.
     Therefore, the whole system of the two subsystems can be at any of FOUR 
@@ -57,11 +57,11 @@ def calculate_propensities(pars, vars):
     Here, the propensitites of the two subsystems at any of the FOUR states are 
     calculated.
     '''
-    #create an empty list to store propensities:
+    #propensities are stored in pros:
     pros = list()
 
     if (vars.get('Px') and vars.get('Py')):
-        #reactions of X system: Promoter P is on
+        #reactions of X system: promoter P is ON
         #R1:
         pros.append(pars.get('KoffX'))
         #R2:
@@ -69,7 +69,7 @@ def calculate_propensities(pars, vars):
         #R3:
         pros.append(pars.get('kX')*vars.get('X'))
 
-        #reactions of Y system: Promoter P is on
+        #reactions of Y system: promoter P is ON
         #R1:
         pros.append(pars.get('KoffY'))
         #R2:
@@ -78,7 +78,7 @@ def calculate_propensities(pars, vars):
         pros.append(pars.get('kY')*vars.get('Y'))
 
     elif (vars.get('Px') and not vars.get('Py')):
-        #reactions of X system: Promoter P is on
+        #reactions of X system: promoter P is ON
         #R1:
         pros.append(pars.get('KoffX'))
         #R2:
@@ -86,7 +86,7 @@ def calculate_propensities(pars, vars):
         #R3:
         pros.append(pars.get('kX')*vars.get('X'))
 
-        #reactions Y system: Promoter P is off
+        #reactions Y system: promoter P is OFF
         #R1:
         pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
         #R2:
@@ -95,7 +95,7 @@ def calculate_propensities(pars, vars):
         pros.append(pars.get('kY')*vars.get('Y'))
 
     elif (not vars.get('Px') and vars.get('Py')):
-        #reactions of X system: Promoter P is off
+        #reactions of X system: promoter P is OFF
         #R1:
         pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
         #R2:
@@ -103,7 +103,7 @@ def calculate_propensities(pars, vars):
         #R3:
         pros.append(pars.get('kX')*vars.get('X'))
 
-        #reactions of Y system: Promoter P is on
+        #reactions of Y system: promoter P is ON
         #R1:
         pros.append(pars.get('KoffY'))
         #R2:
@@ -112,7 +112,7 @@ def calculate_propensities(pars, vars):
         pros.append(pars.get('kY')*vars.get('Y'))
 
     elif (not vars.get('Px') and not vars.get('Py')):
-        #reactions of X system: Promoter P is off
+        #reactions of X system: promoter P is OFF
         #R1:
         pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
         #R2:
@@ -120,7 +120,7 @@ def calculate_propensities(pars, vars):
         #R3:
         pros.append(pars.get('kX')*vars.get('X'))
 
-        #reactions Y system: Promoter P is off
+        #reactions Y system: promoter P is OFF
         #R1:
         pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
         #R2:
@@ -134,7 +134,7 @@ def calculate_propensities_old(pars, vars):
     #create an empty list to store propensities:
     pros = list()
 
-    #reactions of X system: Promoter P on
+    #reactions of X system: promoter P ON
     #R1:
     pros.append(pars.get('KoffX'))
     #R2:
@@ -142,7 +142,7 @@ def calculate_propensities_old(pars, vars):
     #R3:
     pros.append(pars.get('kX')*vars.get('X'))
 
-    #reactions of X system: Promoter P off
+    #reactions of X system: promoter P OFF
     #R1:
     pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
     #R2:
@@ -150,7 +150,7 @@ def calculate_propensities_old(pars, vars):
     #R3:
     pros.append(pars.get('kX')*vars.get('X'))
 
-    #reactions of Y system: Promoter P on
+    #reactions of Y system: promoter P ON
     #R1:
     pros.append(pars.get('KoffY'))
     #R2:
@@ -158,7 +158,7 @@ def calculate_propensities_old(pars, vars):
     #R3:
     pros.append(pars.get('kY')*vars.get('Y'))
 
-    #reactions Y system: Promoter P off
+    #reactions Y system: promoter P OFF
     #R1:
     pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
     #R2:
@@ -170,7 +170,7 @@ def calculate_propensities_old(pars, vars):
 #-----------------------------------------------------------------------------#
 def updateSystem_xPon_yPon(pars, vars, pros):
     '''
-    This method updates the system when both X and Y promoters are on.
+    This method updates the system when both X and Y promoters are ON.
     '''
     #probability of each reaction: 
     pr=[x/sum(pros)for x in pros]
