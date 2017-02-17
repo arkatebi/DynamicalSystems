@@ -42,6 +42,95 @@ def defineSystem():
 
 #-----------------------------------------------------------------------------#
 def calculate_propensities(pars, vars):
+    '''
+    This method calculates the propensitites for all reactions happening at the 
+    current state. Each subsystem can be in two states: Promoter is ON or OFF. 
+    The status of the promoter of two subsystems are stored in variables Px and
+    Py, respectively.
+    Therefore, the whole system of the two subsystems can be at any of FOUR 
+    states:
+    Px  Py 
+    ON  ON 
+    ON  OFF 
+    OFF ON 
+    OFF OFF  
+    Here, the propensitites of the two subsystems at any of the FOUR states are 
+    calculated.
+    '''
+    #create an empty list to store propensities:
+    pros = list()
+
+    if (vars.get('Px') and vars.get('Py')):
+        #reactions of X system: Promoter P is on
+        #R1:
+        pros.append(pars.get('KoffX'))
+        #R2:
+        pros.append(pars.get('gXon'))
+        #R3:
+        pros.append(pars.get('kX')*vars.get('X'))
+
+        #reactions of Y system: Promoter P is on
+        #R1:
+        pros.append(pars.get('KoffY'))
+        #R2:
+        pros.append(pars.get('gYon'))
+        #R3:
+        pros.append(pars.get('kY')*vars.get('Y'))
+
+    elif (vars.get('Px') and not vars.get('Py')):
+        #reactions of X system: Promoter P is on
+        #R1:
+        pros.append(pars.get('KoffX'))
+        #R2:
+        pros.append(pars.get('gXon'))
+        #R3:
+        pros.append(pars.get('kX')*vars.get('X'))
+
+        #reactions Y system: Promoter P is off
+        #R1:
+        pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
+        #R2:
+        pros.append(pars.get('gYoff'))
+        #R3:
+        pros.append(pars.get('kY')*vars.get('Y'))
+
+    elif (not vars.get('Px') and vars.get('Py')):
+        #reactions of X system: Promoter P is off
+        #R1:
+        pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
+        #R2:
+        pros.append(pars.get('gXoff'))
+        #R3:
+        pros.append(pars.get('kX')*vars.get('X'))
+
+        #reactions of Y system: Promoter P is on
+        #R1:
+        pros.append(pars.get('KoffY'))
+        #R2:
+        pros.append(pars.get('gYon'))
+        #R3:
+        pros.append(pars.get('kY')*vars.get('Y'))
+
+    elif (not vars.get('Px') and not vars.get('Py')):
+        #reactions of X system: Promoter P is off
+        #R1:
+        pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
+        #R2:
+        pros.append(pars.get('gXoff'))
+        #R3:
+        pros.append(pars.get('kX')*vars.get('X'))
+
+        #reactions Y system: Promoter P is off
+        #R1:
+        pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
+        #R2:
+        pros.append(pars.get('gYoff'))
+        #R3:
+        pros.append(pars.get('kY')*vars.get('Y'))
+
+    return pros
+
+def calculate_propensities_old(pars, vars):
     #create an empty list to store propensities:
     pros = list()
 
@@ -79,91 +168,145 @@ def calculate_propensities(pars, vars):
     return pros 
 
 #-----------------------------------------------------------------------------#
-def updateSystem_PonX(pars, vars, pros):
+def updateSystem_xPon_yPon(pars, vars, pros):
     '''
-    This method updates the system when X promoter P is on.
+    This method updates the system when both X and Y promoters are on.
     '''
-    #print(pros)
-    #print(len(pros))
-    #print('PonX')
-    #sys.exit(0)
- 
-    ptotal = sum(pros) #total propensity
-    pr = [x/ptotal for x in pros]
+    #probability of each reaction: 
+    pr=[x/sum(pros)for x in pros]
+    #cumulative probabilities: 
+    prAc=[]
+    for k in range(len(pr)):
+        if not k:
+            prAc.append(pr[k])
+            continue
+        prAc.append(prAc[k-1]+pr[k])
     rn=random.uniform(0,1)
-    if rn<pr[0]: 
+    
+    #update system according to the probabilities:    
+    #(options 0 to 2 for X system, 3 to 5 for Y system)
+    if rn<prAc[0]: 
         vars['Y']+=pars['nY']
-        vars['Px']=0
-    elif rn <pr[0]+pr[1]:   
+        vars['Px']=0 #X promoter switches to OFF state
+    elif rn<prAc[1]: 
         vars['X']+=1
-    else:
+    elif rn<prAc[2]: 
         vars['X']-=1
-    return vars
-
-#-----------------------------------------------------------------------------#
-def updateSystem_PoffX(pars, vars, pros):
-    '''
-    This method updates the system when X promoter P is off.
-    '''
-    #print(pros)
-    #print(len(pros))
-    #print('PoffX')
-    #sys.exit(0)
- 
-    ptotal = sum(pros) #total propensity
-    pr = [x/ptotal for x in pros]
-    rn=random.uniform(0,1)
-    if rn<pr[0] and vars.get('Y')>=pars.get('nY'):
-        vars['Y']-=pars['nY']
-        vars['Px']=1 # Promoter switches to ON state
-    elif rn <pr[0]+pr[1]:   
-        vars['X']+=1
-    elif rn <pr[0]+pr[1]+pr[2]:   
-        vars['X']-=1
-    return vars
-
-#-----------------------------------------------------------------------------#
-def updateSystem_PonY(pars, vars, pros):
-    '''
-    This method updates the system when Y promoter P is on.
-    '''
-    #print(pros)
-    #print(len(pros))
-    #print('PonY')
-    #sys.exit(0)
- 
-    ptotal = sum(pros) #total propensity
-    pr = [x/ptotal for x in pros]
-    rn=random.uniform(0,1)
-    if rn<pr[0]: 
+    elif rn<prAc[3]: 
         vars['X']+=pars['nX']
-        vars['Py']=0
-    elif rn <pr[0]+pr[1]:   
+        vars['Py']=0 #Y promoter switches to OFF state
+    elif rn<prAc[4]: 
         vars['Y']+=1
     else:   
         vars['Y']-=1
+
     return vars
 
 #-----------------------------------------------------------------------------#
-def updateSystem_PoffY(pars, vars, pros):
+def updateSystem_xPon_yPoff(pars, vars, pros):
     '''
-    This method updates the system when Y promoter P is off.
+    This method updates the system when X promoter is ON and Y promoter is OFF.
     '''
-    #print(pros)
-    #print(len(pros))
-    #print('PoffY')
-    #sys.exit(0)
- 
-    ptotal = sum(pros) #total propensity
-    pr = [x/ptotal for x in pros]
+    #probability of each reaction: 
+    pr=[x/sum(pros)for x in pros]
+    #cumulative probabilities: 
+    prAc=[]
+    for k in range(len(pr)):
+        if not k:
+            prAc.append(pr[k])
+            continue
+        prAc.append(prAc[k-1]+pr[k])
     rn=random.uniform(0,1)
-    if rn<pr[0] and vars.get('X')>=pars.get('nX'):
+    #update system according to the probabilities:    
+    #(options 0 to 2 for X system, 3 to 5 for Y system)
+    if rn<prAc[0]: 
+        vars['Y']+=pars['nY']
+        vars['Px']=0 #X promoter switches to OFF state
+    elif rn<prAc[1]:
+        vars['X']+=1
+    elif rn<prAc[2]: 
+        vars['X']-=1
+    elif rn<prAc[3] and vars.get('X')>=pars.get('nX'): 
+        #Critical Point 1
         vars['X']-=pars['nX']
-        vars['Py']=1 #Promoter switches to ON state
-    elif rn<pr[0]+pr[1]:
+        vars['Py']=1 #Y promoter switches to ON state
+    elif rn<prAc[4]:
         vars['Y']+=1
-    elif rn<pr[0]+pr[1]+pr[2]:
+    else:
         vars['Y']-=1
+
+    return vars
+
+#-----------------------------------------------------------------------------#
+def updateSystem_xPoff_yPon(pars, vars, pros):
+    '''
+    This method updates the system when X promoter is OFF and Y promoter is ON.
+    '''
+    #probability of each reaction: 
+    pr=[x/sum(pros)for x in pros]
+    #cumulative probabilities: 
+    prAc=[]
+    for k in range(len(pr)):
+        if not k:
+            prAc.append(pr[k])
+            continue
+        prAc.append(prAc[k-1]+pr[k])
+    rn=random.uniform(0,1)
+    #update system according to the probabilities:    
+    #(options 0 to 2 for X system, 3 to 5 for Y system)
+
+    if rn<prAc[0] and vars.get('Y')>=pars.get('nY'):
+        #Critical Point 2
+        vars['Y']-=pars['nY']
+        vars['Px']=1 # X promoter switches to ON state
+    elif rn <prAc[1]:   
+        vars['X']+=1
+    elif rn <prAc[2]:   
+        vars['X']-=1
+    elif rn<prAc[3]: 
+        vars['X']+=pars['nX']
+        vars['Py']=0 #Y promoter switches to OFF state
+    elif rn<prAc[4]: 
+        vars['Y']+=1
+    else:   
+        vars['Y']-=1
+
+    return vars
+
+#-----------------------------------------------------------------------------#
+def updateSystem_xPoff_yPoff(pars, vars, pros):
+    '''
+    This method updates the system when both X and Y promoters are OFF.
+    '''
+    #probability of each reaction: 
+    pr=[x/sum(pros)for x in pros]
+    #cumulative probabilities: 
+    prAc=[]
+    for k in range(len(pr)):
+        if not k:
+            prAc.append(pr[k])
+            continue
+        prAc.append(prAc[k-1]+pr[k])
+    rn=random.uniform(0,1)
+    #update system according to the probabilities:    
+    #(options 0 to 2 for X system, 3 to 5 for Y system)
+    if rn<prAc[0] and vars.get('Y')>=pars.get('nY'):
+        #Critical Point 3 => Critical Point 2
+        vars['Y']-=pars['nY']
+        vars['Px']=1 #X promoter switches to ON state
+    elif rn <prAc[1]:
+        vars['X']+=1
+    elif rn <prAc[2]:
+        vars['X']-=1
+    elif rn<prAc[3] and vars.get('X')>=pars.get('nX'): 
+        #Critical Point 4 => Critical Point 1
+        vars['X']-=pars['nX']
+        vars['Py']=1 #Y promoter switches to ON state
+    elif rn<prAc[4]:
+        vars['Y']+=1
+    else:
+        vars['Y']-=1
+
     return vars
 
 #-----------------------------------------------------------------------------#
@@ -172,16 +315,18 @@ def updateSystem(pars, vars, pros):
     This method updates system after performing specific 
     reaction in each subsystem.
     '''
-    #print(pros)
-    #print(len(pros))
-    if vars.get('Px'):
-        updateSystem_PonX(pars, vars, pros[0:3])
-    elif not vars.get('Px') and vars.get('Y')>=pars.get('nY'):
-        updateSystem_PoffX(pars, vars, pros[3:6])
-    if vars.get('Py'):
-        updateSystem_PonY(pars, vars, pros[6:9])
-    elif not vars.get('Py') and vars.get('X')>=pars.get('nX'):
-        updateSystem_PoffY(pars, vars, pros[9:])
+    print(pros)
+    print(len(pros))
+    print('here')
+
+    if vars.get('Px') and vars.get('Py'):
+        vars=updateSystem_xPon_yPon(pars, vars, pros)
+    elif vars.get('Px') and not vars.get('Py'):
+        vars=updateSystem_xPon_yPoff(pars, vars, pros)
+    elif not vars.get('Px') and vars.get('Py'):
+        vars=updateSystem_xPoff_yPon(pars, vars, pros)
+    else: #elif not vars.get('Px') and not vars.get('Py'):
+        vars=updateSystem_xPoff_yPoff(pars, vars, pros)
     return vars
 
 #-----------------------------------------------------------------------------#
@@ -205,24 +350,28 @@ def run_simulation(pars, vars, tmax):
     #run the simulation using Gillespie's Direct Method:
     print('tc', '\t', 'X', '\t', 'Y', '\t', 'Px', '\t', 'Py')
     while(tc<tmax):
-        #calculate propensities:
-        pros = calculate_propensities(pars, vars)
-        #print(pros)
-        #print(len(pros))
-        ptotal=sum(pros) #total propensity
-        if(not ptotal):
-            continue
         #save configuration at multiple of 'factor' timesteps:
         if (not (count%factor)):
             print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
                       '\t', vars.get('Px'), '\t', vars.get('Py'))
+        #calculate propensities:
+        pros = calculate_propensities(pars, vars)
+        #print(pros)
+        #print(len(pros))
+        #sys.exit(0)
 
         #perform specific reaction based on propensity values:
         vars=updateSystem(pars, vars, pros)
-        #if(vars.get('X')<0 or vars.get('Y')<0):
-        #    print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
-        #              '\t', vars.get('Px'), '\t', vars.get('Py'))
-        #    return None
+
+        if(vars.get('X')<0 or vars.get('Y')<0):
+            print('system variable X or Y is below 0')
+            print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
+                      '\t', vars.get('Px'), '\t', vars.get('Py'))
+            return None
+ 
+        ptotal=sum(pros) #total propensity
+        if(not ptotal):
+            continue
         #obtain wait time dt from exponential distribution:
         lambd=ptotal # lambd = 1/mean where mean = 1/Rtotal
         dt=random.expovariate(lambd)
