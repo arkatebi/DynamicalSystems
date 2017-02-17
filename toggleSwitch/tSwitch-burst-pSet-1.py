@@ -312,20 +312,16 @@ def updateSystem_xPoff_yPoff(pars, vars, pros):
 #-----------------------------------------------------------------------------#
 def updateSystem(pars, vars, pros):
     '''
-    This method updates system after performing specific 
-    reaction in each subsystem.
+    This method updates the system variables by performing specific 
+    reaction(s) at each time step.
     '''
-    print(pros)
-    print(len(pros))
-    print('here')
-
-    if vars.get('Px') and vars.get('Py'):
+    if vars.get('Px') and vars.get('Py'): #both promoters ON
         vars=updateSystem_xPon_yPon(pars, vars, pros)
-    elif vars.get('Px') and not vars.get('Py'):
+    elif vars.get('Px') and not vars.get('Py'): #X promoter ON, Y promoter OFF
         vars=updateSystem_xPon_yPoff(pars, vars, pros)
-    elif not vars.get('Px') and vars.get('Py'):
+    elif not vars.get('Px') and vars.get('Py'): #X promoter OFF, Y promoter ON
         vars=updateSystem_xPoff_yPon(pars, vars, pros)
-    else: #elif not vars.get('Px') and not vars.get('Py'):
+    else: #elif not vars.get('Px') and not vars.get('Py'): #both promoters OFF
         vars=updateSystem_xPoff_yPoff(pars, vars, pros)
     return vars
 
