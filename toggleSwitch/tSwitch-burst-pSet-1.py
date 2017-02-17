@@ -37,7 +37,7 @@ def defineSystem():
     vars['Px'] = 0 
     vars['Py'] = 0
     #set simulation time: 
-    tmax=5.0e+6
+    tmax=2.0e+6
     return (pars,vars,tmax)
 
 #-----------------------------------------------------------------------------#
@@ -347,9 +347,11 @@ def run_simulation(pars, vars, tmax):
     print('tc', '\t', 'X', '\t', 'Y', '\t', 'Px', '\t', 'Py')
     while(tc<tmax):
         #save configuration at multiple of 'factor' timesteps:
-        if (not (count%factor)):
-            print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
-                      '\t', vars.get('Px'), '\t', vars.get('Py'))
+        #if (not (count%factor)):
+        #    print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
+        #              '\t', vars.get('Px'), '\t', vars.get('Py'))
+        print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
+                  '\t', vars.get('Px'), '\t', vars.get('Py'))
         #calculate propensities:
         pros = calculate_propensities(pars, vars)
         #print(pros)
