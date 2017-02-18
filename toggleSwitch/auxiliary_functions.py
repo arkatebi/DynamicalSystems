@@ -197,7 +197,6 @@ def parameter_burst_1():
     pars['KoffX'] = 1.25e-3
     pars['KonX'] = 1.0e-8
 
-
     #pars['gXon'] = 5.0e1
     pars['gXon'] = 5.0e1
     #pars['gXoff'] = 5.0e1
