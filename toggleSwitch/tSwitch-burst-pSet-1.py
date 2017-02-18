@@ -37,7 +37,7 @@ def defineSystem():
     vars['Px'] = 0 
     vars['Py'] = 0
     #set simulation time: 
-    tmax=2.0e+6
+    tmax=5.0e+6
     return (pars,vars,tmax)
 
 #-----------------------------------------------------------------------------#
@@ -130,43 +130,6 @@ def calculate_propensities(pars, vars):
 
     return pros
 
-def calculate_propensities_old(pars, vars):
-    #create an empty list to store propensities:
-    pros = list()
-
-    #reactions of X system: promoter P ON
-    #R1:
-    pros.append(pars.get('KoffX'))
-    #R2:
-    pros.append(pars.get('gXon'))
-    #R3:
-    pros.append(pars.get('kX')*vars.get('X'))
-
-    #reactions of X system: promoter P OFF
-    #R1:
-    pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
-    #R2:
-    pros.append(pars.get('gXoff'))
-    #R3:
-    pros.append(pars.get('kX')*vars.get('X'))
-
-    #reactions of Y system: promoter P ON
-    #R1:
-    pros.append(pars.get('KoffY'))
-    #R2:
-    pros.append(pars.get('gYon'))
-    #R3:
-    pros.append(pars.get('kY')*vars.get('Y'))
-
-    #reactions Y system: promoter P OFF
-    #R1:
-    pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
-    #R2:
-    pros.append(pars.get('gYoff'))
-    #R3:
-    pros.append(pars.get('kY')*vars.get('Y'))
-    return pros 
-
 #-----------------------------------------------------------------------------#
 def updateSystem_xPon_yPon(pars, vars, pros):
     '''
@@ -185,19 +148,19 @@ def updateSystem_xPon_yPon(pars, vars, pros):
     
     #update system according to the probabilities:    
     #(options 0 to 2 for X system, 3 to 5 for Y system)
-    if rn<prAc[0]: 
+    if rn<prAc[0]:
         vars['Y']+=pars['nY']
         vars['Px']=0 #X promoter switches to OFF state
-    elif rn<prAc[1]: 
+    elif rn<prAc[1]:
         vars['X']+=1
     elif rn<prAc[2]: 
         vars['X']-=1
     elif rn<prAc[3]: 
         vars['X']+=pars['nX']
         vars['Py']=0 #Y promoter switches to OFF state
-    elif rn<prAc[4]: 
+    elif rn<prAc[4]:
         vars['Y']+=1
-    else:   
+    else:
         vars['Y']-=1
 
     return vars
@@ -207,9 +170,9 @@ def updateSystem_xPon_yPoff(pars, vars, pros):
     '''
     This method updates the system when X promoter is ON and Y promoter is OFF.
     '''
-    #probability of each reaction: 
+    #probability of each reaction:
     pr=[x/sum(pros)for x in pros]
-    #cumulative probabilities: 
+    #cumulative probabilities:
     prAc=[]
     for k in range(len(pr)):
         if not k:
@@ -217,16 +180,16 @@ def updateSystem_xPon_yPoff(pars, vars, pros):
             continue
         prAc.append(prAc[k-1]+pr[k])
     rn=random.uniform(0,1)
-    #update system according to the probabilities:    
+    #update system according to the probabilities:
     #(options 0 to 2 for X system, 3 to 5 for Y system)
-    if rn<prAc[0]: 
+    if rn<prAc[0]:
         vars['Y']+=pars['nY']
         vars['Px']=0 #X promoter switches to OFF state
     elif rn<prAc[1]:
         vars['X']+=1
-    elif rn<prAc[2]: 
+    elif rn<prAc[2]:
         vars['X']-=1
-    elif rn<prAc[3] and vars.get('X')>=pars.get('nX'): 
+    elif rn<prAc[3] and vars.get('X')>=pars.get('nX'):
         #Critical Point 1
         vars['X']-=pars['nX']
         vars['Py']=1 #Y promoter switches to ON state
@@ -347,11 +310,11 @@ def run_simulation(pars, vars, tmax):
     print('tc', '\t', 'X', '\t', 'Y', '\t', 'Px', '\t', 'Py')
     while(tc<tmax):
         #save configuration at multiple of 'factor' timesteps:
-        #if (not (count%factor)):
-        #    print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
-        #              '\t', vars.get('Px'), '\t', vars.get('Py'))
-        print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
-                  '\t', vars.get('Px'), '\t', vars.get('Py'))
+        if (not (count%factor)):
+            print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
+                      '\t', vars.get('Px'), '\t', vars.get('Py'))
+        #print(tc, '\t', vars.get('X'), '\t', vars.get('Y'), 
+        #          '\t', vars.get('Px'), '\t', vars.get('Py'))
         #calculate propensities:
         pros = calculate_propensities(pars, vars)
         #print(pros)
