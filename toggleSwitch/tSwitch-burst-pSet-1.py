@@ -23,7 +23,7 @@ import auxiliary_functions as aux
 #-----------------------------------------------------------------------------#
 def defineSystem():
     '''
-    Create dictionaries to define the system
+    Create variables to store the parameters and status of the system. 
     '''
     #set parameters:
     pars = OrderedDict() 
@@ -31,11 +31,14 @@ def defineSystem():
     #set initial conditions for the system variables: 
     vars=OrderedDict()
     vars['X'] = 100 
+    #vars['X'] = 0 
     vars['Y'] = 100
+    #vars['Y'] = 0
+
     vars['Px'] = 0 
     vars['Py'] = 1
     #set simulation time: 
-    tmax=3.0e+6
+    tmax=5.0e+6
     return (pars,vars,tmax)
 
 #-----------------------------------------------------------------------------#
@@ -90,7 +93,7 @@ def calculate_propensities(pars, vars):
         if (vars.get('X')>=pars.get('nX')):
             pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
         else: 
-            pros.append(0)
+            pros.append(0.0)
             availableReactions[3]=0
         #R2:
         pros.append(pars.get('gYoff'))
@@ -100,10 +103,10 @@ def calculate_propensities(pars, vars):
     elif (not vars.get('Px') and vars.get('Py')):
         #reactions of X system: promoter P is OFF
         #R1:
-        if (vars.get('Y')>=pars.get('nY')):
+        if (vars.get('Y')>=pars.get('nY')): #R1 IS Available
             pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
-        else: #R1 is not Available
-            pros.append(0)
+        else: #R1 is NOT Available
+            pros.append(0.0)
             availableReactions[0]=0
         #R2:
         pros.append(pars.get('gXoff'))
@@ -124,19 +127,19 @@ def calculate_propensities(pars, vars):
         if (vars.get('Y')>=pars.get('nY')):
             pros.append(pars.get('KonX')*(vars.get('Y')**pars.get('nY')))
         else: #R1 is not Available
-            pros.append(0)
+            pros.append(0.0)
             availableReactions[0]=0
         #R2:
         pros.append(pars.get('gXoff'))
         #R3:
         pros.append(pars.get('kX')*vars.get('X'))
 
-        #reactions Y system: promoter P is OFF
+        #reactions of Y system: promoter P is OFF
         #R1:
         if (vars.get('X')>=pars.get('nX')):
             pros.append(pars.get('KonY')*(vars.get('X')**pars.get('nX')))
         else:
-            pros.append(0)
+            pros.append(0.0)
             availableReactions[3]=0
         #R2:
         pros.append(pars.get('gYoff'))
@@ -160,9 +163,9 @@ def updateSystem_xPon_yPon(pars, vars, pros):
             prAc.append(pr[k])
             continue
         prAc.append(prAc[k-1]+pr[k])
-    rn=random.uniform(0,1)
     
-    #update system according to the probabilities:    
+    #update system by randomly selecting a reaction:    
+    rn=random.uniform(0,1)
     #(options 0 to 2 for X system, 3 to 5 for Y system)
     if rn<prAc[0]:
         vars['Y']+=pars['nY']
@@ -196,8 +199,9 @@ def updateSystem_xPon_yPoff(pars, vars, pros):
             prAc.append(pr[k])
             continue
         prAc.append(prAc[k-1]+pr[k])
+
+    #update system by randomly selecting a reaction:    
     rn=random.uniform(0,1)
-    #update system according to the probabilities:
     #(options 0 to 2 for X system, 3 to 5 for Y system)
     if rn<prAc[0]:
         vars['Y']+=pars['nY']
@@ -206,7 +210,7 @@ def updateSystem_xPon_yPoff(pars, vars, pros):
         vars['X']+=1
     elif rn<prAc[2]:
         vars['X']-=1
-    elif rn<prAc[3] and vars.get('X')>=pars.get('nX'):
+    elif rn<prAc[3]: # and vars.get('X')>=pars.get('nX'):
         #Critical Point 1
         vars['X']-=pars['nX']
         vars['Py']=1 #Y promoter switches to ON state
@@ -222,6 +226,7 @@ def updateSystem_xPoff_yPon(pars, vars, pros):
     '''
     This method updates the system when X promoter is OFF and Y promoter is ON.
     '''
+    
     #probability of each reaction: 
     ptotal = sum(pros)
     pr=[x/ptotal for x in pros]
@@ -232,11 +237,12 @@ def updateSystem_xPoff_yPon(pars, vars, pros):
             prAc.append(pr[k])
             continue
         prAc.append(prAc[k-1]+pr[k])
+
+    #update system by randomly selecting a reaction:    
     rn=random.uniform(0,1)
-    #update system according to the probabilities:    
     #(options 0 to 2 for X system, 3 to 5 for Y system)
 
-    if rn<prAc[0] and vars.get('Y')>=pars.get('nY'):
+    if rn<prAc[0]: #and vars.get('Y')>=pars.get('nY'):
         #Critical Point 2
         vars['Y']-=pars['nY']
         vars['Px']=1 # X promoter switches to ON state
@@ -269,10 +275,11 @@ def updateSystem_xPoff_yPoff(pars, vars, pros):
             prAc.append(pr[k])
             continue
         prAc.append(prAc[k-1]+pr[k])
+
+    #update system by randomly selecting a reaction:    
     rn=random.uniform(0,1)
-    #update system according to the probabilities:    
     #(options 0 to 2 for X system, 3 to 5 for Y system)
-    if rn<prAc[0] and vars.get('Y')>=pars.get('nY'):
+    if rn<prAc[0]: #and vars.get('Y')>=pars.get('nY'):
         #Critical Point 3 => Critical Point 2
         vars['Y']-=pars['nY']
         vars['Px']=1 #X promoter switches to ON state
@@ -280,7 +287,7 @@ def updateSystem_xPoff_yPoff(pars, vars, pros):
         vars['X']+=1
     elif rn <prAc[2]:
         vars['X']-=1
-    elif rn<prAc[3] and vars.get('X')>=pars.get('nX'): 
+    elif rn<prAc[3]: # and vars.get('X')>=pars.get('nX'): 
         #Critical Point 4 => Critical Point 1
         vars['X']-=pars['nX']
         vars['Py']=1 #Y promoter switches to ON state
