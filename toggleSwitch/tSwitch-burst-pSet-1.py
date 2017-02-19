@@ -14,7 +14,6 @@
     System variables: X, Y, Px, and Py
     Dummy variable: phi
     System parameters: gX, gY, kX, kY 
-    Auxiliary function: HS    
 '''
 import sys
 import random
