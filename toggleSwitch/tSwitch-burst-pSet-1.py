@@ -359,7 +359,7 @@ def run_simulation(pars, vars, tmax):
             print('ptotal became zero')
             sys.exit(0) 
         #obtain wait time dt from exponential distribution:
-        lambd=ptotal # lambd = 1/mean where mean = 1/Rtotal
+        lambd=ptotal # lambd = 1/mean where mean = 1/ptotal
         dt=random.expovariate(lambd)
         tc+=dt
         count+=1
@@ -367,22 +367,11 @@ def run_simulation(pars, vars, tmax):
     return None
 
 #-----------------------------------------------------------------------------#
-def plot_trajectory(series_cnt, series_X, series_Y):
-    import pylab as pl 
-    xLen=int(len(series_cnt)/1)
-    #pl.plot(series_cnt, series_X, ':k', label='X') # plot X trajectory
-    pl.plot(series_cnt[0:xLen], series_X[0:xLen], ':k', label='X') #X trajectory
-    #pl.plot(series_cnt, series_Y, '-r', label='Y') # plot Y trajectory
-    pl.plot(series_cnt[0:xLen], series_Y[0:xLen], '-r', label='Y') #Y trajectory
-    pl.legend()
-    pl.show()
-
-#-----------------------------------------------------------------------------#
 if __name__=="__main__":
     import time
     (pars,vars,tmax)=defineSystem()
     t_start=time.time()
-    run_simulation(pars, vars, tmax)
+    run_simulation(pars,vars,tmax)
     t_end=time.time()
-    print('simulation time: ', t_end-t_start)
-    #plot_trajectory(ser_cnt,ser_X,ser_Y)
+    print('simulation time: ',t_end-t_start)
+    sys.exit(0)
