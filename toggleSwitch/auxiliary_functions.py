@@ -215,7 +215,6 @@ def parameter_burst_1():
     pars['KoffY'] = 1.0e-5
     pars['KonY'] = 1.0e-8
 
-
     pars['gYon'] = 5.0e0
     pars['gYoff'] = 5.0e-1
 
