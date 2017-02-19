@@ -183,19 +183,24 @@ def parameter_st_3():
     return pars 
 
 #------------------------------------------------------------------------------#
-def parameter_burst_1():
+def parameter_burst_2():
     '''
     The parameter set for simulating protein burst. 
     '''
     from collections import OrderedDict
     pars = OrderedDict() 
     #system of gene X and its promoter 
-    #pars['KoffX'] = 1.0e+2
-    #pars['KonX'] = 1.0e-1
     #pars['KoffX'] = 1.25e+3
     #pars['KonX'] = 1.0e-2
-    pars['KoffX'] = 1.25e-3
-    pars['KonX'] = 1.0e-8
+
+    #pars['KoffX'] = 1.25e-3
+    #pars['KonX'] = 1.0e-8
+
+    #t3:    
+    #pars['KoffX'] = 1.25e-8
+    #pars['KonX'] = 1.0e-13
+    pars['KoffX'] = 1.25e-5
+    pars['KonX'] = 1.0e-10
 
     #pars['gXon'] = 5.0e1
     pars['gXon'] = 5.0e1
@@ -206,12 +211,16 @@ def parameter_burst_1():
     pars['nY'] = 3.0e0
 
     #system of gene Y and its promoter 
-    #pars['KoffY'] = 1.0e+2
-    #pars['KonY'] = 1.0e-1
     #pars['KoffY'] = 1.25e+3
     #pars['KonY'] = 1.0e-2
-    pars['KoffY'] = 1.25e-3
-    pars['KonY'] = 1.0e-8
+    #pars['KoffY'] = 1.25e-3
+    #pars['KonY'] = 1.0e-8
+    #pars['KoffY'] = 1.25e-8
+    #pars['KonY'] = 1.0e-13
+    #t3:
+    pars['KoffY'] = 1.25e-5
+    pars['KonY'] = 1.0e-10
+
 
     pars['gYon'] = 5.0e1
     pars['gYoff'] = 5.0e0
