@@ -336,7 +336,6 @@ def run_simulation(pars, vars, tmax):
     #iteration counter:
     factor=1000
     count = 0
-    #run the simulation using Gillespie's Direct Method:
     print('tc', '\t', 'X', '\t', 'Y', '\t', 'Px', '\t', 'Py')
     while(tc<tmax):
         #save configuration at multiple of 'factor' timesteps:
