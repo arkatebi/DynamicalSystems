@@ -3,14 +3,13 @@
     Mutually Inhibitory Toggle Switch with protein burst.
     X ---| Y; Y ---| X
     DEs for the toggle switch system:
-    dX/dt = gX*HS(Y) - kX*X
-    dY/dt = gY*HS(X) - kY*Y
+
 
     The equivalent chemical system: 
-    R1: phi -> X, with reaction (production) rate gX*HS(Y) 
-    R2: X -> phi, with reaction (degradation) rate kX
-    R3: phi -> Y with reaction (production) rate gY*HS(X) 
-    R4: Y -> phi, with reaction (degradation) rate kY
+    R1:  
+    R2: 
+    R3:  
+    R4: 
     
     System variables: X, Y, Px, and Py
     Dummy variable: phi
