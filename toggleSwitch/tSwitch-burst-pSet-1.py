@@ -35,9 +35,9 @@ def defineSystem():
     vars['X'] = 100 
     vars['Y'] = 100
     vars['Px'] = 0 
-    vars['Py'] = 0
+    vars['Py'] = 1
     #set simulation time: 
-    tmax=5.0e+6
+    tmax=3.0e+6
     return (pars,vars,tmax)
 
 #-----------------------------------------------------------------------------#
@@ -310,6 +310,7 @@ def updateSystem(pars, vars):
         (ptotal,vars) = updateSystem_xPoff_yPon(pars, vars, pros)
     else: #elif not vars.get('Px') and not vars.get('Py'): #both promoters OFF
         (ptotal,vars) = updateSystem_xPoff_yPoff(pars, vars, pros)
+
     return (ptotal,vars)
 
 #-----------------------------------------------------------------------------#
