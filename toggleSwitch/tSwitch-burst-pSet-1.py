@@ -38,7 +38,7 @@ def defineSystem():
     vars['Px'] = 0 
     vars['Py'] = 1
     #set simulation time: 
-    tmax=5.0e+6
+    tmax=1.0e+6
     return (pars,vars,tmax)
 
 #-----------------------------------------------------------------------------#
