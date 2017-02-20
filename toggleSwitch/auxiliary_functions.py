@@ -190,10 +190,10 @@ def parameter_burst_1():
     pars = OrderedDict() 
     #system of gene X and its promoter 
     #t1:    
-    #pars['KoffX'] = 1.0e+1
-    #pars['KonX'] = 1.0e-2
-    pars['KoffX'] = 1.0e-1
-    pars['KonX'] = 1.0e-4
+    pars['KoffX'] = 1.0e+1
+    pars['KonX'] = 1.0e-2
+    #pars['KoffX'] = 1.0e-1
+    #pars['KonX'] = 1.0e-4
     #pars['KoffX'] = 1.0e-4
     #pars['KonX'] = 1.0e-7
     #pars['KoffX'] = 1.0e-5
@@ -206,10 +206,10 @@ def parameter_burst_1():
     pars['nY'] = 3.0e0
 
     #system of gene Y and its promoter 
-    #pars['KoffY'] = 1.0e0
-    #pars['KonY'] = 1.0e-2
-    pars['KoffY'] = 1.0e-1
-    pars['KonY'] = 1.0e-4
+    pars['KoffY'] = 1.0e+1
+    pars['KonY'] = 1.0e-2
+    #pars['KoffY'] = 1.0e-1
+    #pars['KonY'] = 1.0e-4
     #pars['KoffY'] = 1.0e-4
     #pars['KonY'] = 1.0e-7
     #pars['KoffY'] = 1.0e-5
