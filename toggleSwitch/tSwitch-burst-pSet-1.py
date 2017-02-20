@@ -322,7 +322,7 @@ def updateSystem(pars, vars):
 def run_simulation(pars, vars, tmax):
     '''
     This method repeatedly performs the following tasks: 
-    (1) Calculate propensities for each reaction as a function of the current
+    (1) Calculates propensities for each reaction as a function of the current
         state of the system.
     (2) Stochastically selects the next reaction to occur and update the 
         system after the reaction is performed.
