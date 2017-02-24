@@ -69,6 +69,6 @@ def run_simulation(vars,pars,dt,tmax):
 if __name__=='__main__':
    num_sims = 1
    for i_sim in range(num_sims):
-       (vars, pars, dt, tmax) = defineSystem()  
-       run_simulation(vars, pars, dt, tmax)
+       (vars,pars,dt,tmax)=defineSystem()  
+       run_simulation(vars,pars,dt,tmax)
        print('\n')
