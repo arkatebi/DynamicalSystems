@@ -57,7 +57,7 @@ def run_simulation(vars,pars,dt,tmax):
     while(tc<=tmax):
         if (not count%factor):
             print(tc,'\t',vars.get('X'))
-        #print(tc, '\t', vars.get('X'))
+        #print(tc,'\t',vars.get('X'))
         a=getEffectiveRate(vars.get('X'),pars.get('gX'),pars.get('kX'))
         b=getNoiseStrength(vars.get('X'),pars.get('gX'),pars.get('kX'))
         #update the system:
@@ -67,7 +67,7 @@ def run_simulation(vars,pars,dt,tmax):
 
 #-------------------------------------------------------------------------------
 if __name__=='__main__':
-   num_sims = 1
+   num_sims=1
    for i_sim in range(num_sims):
        (vars,pars,dt,tmax)=defineSystem()  
        run_simulation(vars,pars,dt,tmax)
