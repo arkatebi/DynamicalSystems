@@ -3,7 +3,7 @@
 Simulation of the birth-death process of a single gene considering the 
 intrinsic noise in the birth-death process.
  
-ODE: NO intrinsic noise is prsent
+ODE: NO intrinsic noise is present
 dX/dt=gX-kX*X
 
 SDE: intrinsic noise is present
