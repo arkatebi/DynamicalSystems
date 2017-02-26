@@ -1,6 +1,6 @@
 <a name="title" />
-## Mutually Inhibitory Genetic Toggle Switch (no self-activation) 
-#### A deterministic dynamical system of two genes X and Y
-#### Gene X inhibits gene Y, and vice versa
-#### No self-activation is allowed on either X or Y
-#### The system can achieve bistability for certain range of parameter values
+## Toggle Switch of Two Transcription Factors (no self-activation) 
+#### As a deterministic dynamical system 
+#### As a dynamic chemical system (stochasticity comes from random selection)
+#### As a dynamic chemical system with allowing protein burst (same as previous one) 
+#### As a stochastic system obtaining noise from markov process
