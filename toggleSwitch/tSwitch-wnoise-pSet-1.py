@@ -12,7 +12,7 @@ White noise is introduced in the system according to the Wiener process:
 dX/dt=gX*HS(Y)-kX*X+g*sqrt(dt)*dW(dt)
 dY/dt=gX*HS(X)-kY*Y+g*sqrt(dt)*dW(dt)
 where: 
-    HS models the mutual inhibition of the two genes X and Y
+    HS models the mutual inhibition of the TFs X and Y
     W models the standard Brownian motion 
     g models the noise strength
 '''
