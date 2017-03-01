@@ -55,6 +55,7 @@ def getEffectiveRate(X,gX,kX,sh_impact_Y):
 def getNoiseStrength(X,gX,kX):
     #g=np.sqrt((gX+kX*X)/2)
     g=np.sqrt(abs((gX+kX*X))/2)
+    #g=np.sqrt(abs(X)/2)
     return g 
 
 #-----------------------------------------------------------------------------#
@@ -80,7 +81,12 @@ def run_simulation(vars,pars,dt,tmax):
         b=getNoiseStrength(vars.get('X'),pars.get('gX'),pars.get('kX'))
         dX=a*dt+b*np.sqrt(dt)*dW(dt)
         #update X-subsytem:
-        vars['X']+=dX 
+        #vars['X']+=dX 
+        tmp=vars['X']+dX
+        if (tmp)>=0:
+            vars['X']=tmp 
+        else:
+            vars['X']=0 
 
         #approximate the change in Y-subsystem:
         sh_impact_X=shifted_hill_impact(vars.get('X'), 
@@ -91,14 +97,18 @@ def run_simulation(vars,pars,dt,tmax):
         b=getNoiseStrength(vars.get('Y'),pars.get('gY'), 
                            pars.get('kY'))
         dY=a*dt+b*np.sqrt(dt)*dW(dt)
+        #vars['Y']+=dY 
         #update Y-subsytem:
-        vars['Y']+=dY 
+        tmp=vars['Y']+dY
+        if (tmp)>=0:
+            vars['Y']=tmp 
+        else:
+            vars['Y']=0 
         tc+=dt
         count+=1
-
 #-----------------------------------------------------------------------------#
 if __name__=='__main__':
-   num_sims=5
+   num_sims=1
    for i_sim in range(num_sims):
        (vars,pars,dt,tmax) = defineSystem()  
        run_simulation(vars,pars,dt,tmax)
