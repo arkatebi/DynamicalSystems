@@ -83,7 +83,7 @@ def run_simulation(vars,pars,dt,tmax):
         #update X-subsytem:
         #vars['X']+=dX 
         tmp=vars['X']+dX
-        if (tmp)>=0:
+        if (tmp)>0:
             vars['X']=tmp 
         else:
             vars['X']=0 
@@ -100,7 +100,7 @@ def run_simulation(vars,pars,dt,tmax):
         #vars['Y']+=dY 
         #update Y-subsytem:
         tmp=vars['Y']+dY
-        if (tmp)>=0:
+        if (tmp)>0:
             vars['Y']=tmp 
         else:
             vars['Y']=0 
