@@ -17,11 +17,11 @@ For questions, please email: Ataur Katebi (arkatebi@gmail.com).
 <a name="refSet" />
 ### References 
 
-[1] Strogatz SH (2015). Nonlinear dynamics and chaos with applications to 
+[1] Strogatz, SH (2015). Nonlinear dynamics and chaos with applications to 
     physics, biology, chemistry, and engineering, second edition, Westview 
     Press.
 
-[2] Clewley R (2012). Hybrid models and biological model reduction with 
-    PyDSTool, PLoS Computational Biology 8(8), PMID: 22912566.  
+[2] Van Kampen, NG (2007). Stochastic processes in physics and chemistry, 
+    3rd edition, North Holland.
 
 [Go to the top] (#title)
