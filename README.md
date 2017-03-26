@@ -1,4 +1,3 @@
-<a name="title" />
 ## Some Examples of Dynamical Systems
 
 ### Contents
