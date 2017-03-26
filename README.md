@@ -1,11 +1,9 @@
-<a name="title" />
 ## Some Examples of Dynamical Systems
 
 ### Contents
-1\. [Genetic Toggle Switch] (#toggleSwitch)
+1\. [Genetic Toggle Switch] 
 
 
-<a name="toggleSwitch">
 ### Genetic Toggle Switch 
 https://github.com/arkatebi/DynamicalSystems/blob/master/toggleSwitch/
 
@@ -14,7 +12,6 @@ This is an open source project and the source code is publicly available on
 GitHub through the following URL: https://github.com/arkatebi/DynamicalSystems.
 For questions, please email: Ataur Katebi (arkatebi@gmail.com).
 
-<a name="refSet" />
 ### References 
 
 [1] Strogatz, SH (2015). Nonlinear dynamics and chaos with applications to 
@@ -24,4 +21,3 @@ For questions, please email: Ataur Katebi (arkatebi@gmail.com).
 [2] Van Kampen, NG (2007). Stochastic processes in physics and chemistry, 
     3rd edition, North Holland.
 
-[Go to the top] (#title)
