@@ -1,7 +1,7 @@
 ## Some Examples of Dynamical Systems
 
 ### Contents
-1\. [Genetic Toggle Switch] 
+1\. Genetic Toggle Switch
 
 
 ### Genetic Toggle Switch 
